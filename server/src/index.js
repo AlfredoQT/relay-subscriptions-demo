@@ -1,16 +1,11 @@
-// @flow
+const http = require('http');
+const express = require('express');
+const SubscriptionServer = require('./utils/subscription-server');
 
-const capitalize = require('./utils/capitalize');
+const server = http.createServer(express());
 
-type Point2D = {
-  x: number,
-  y: number
-};
+const subscriptionServer = new SubscriptionServer({
+  server: server
+});
 
-const muhPoint: Point2D = {
-  x: 1,
-  y: 4
-};
-
-console.log(muhPoint.x, muhPoint.y);
-console.log(capitalize('cApitalize ThIs'));
+server.listen(4000, () => console.log('Server'));

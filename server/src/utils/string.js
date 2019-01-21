@@ -1,4 +1,4 @@
-// @flow
+/* @flow */
 function capitalize(phrase: string) {
   return phrase
     .split(' ')

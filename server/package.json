@@ -8,6 +8,7 @@
     "flow": "flow",
     "flow:check": "flow check ./src/",
     "flow:build": "flow-remove-types ./src/ -d ./lib/ --all --pretty",
+    "flow:deps": "flow-typed install",
     "prestart": "npm run flow:build",
     "start": "node ./lib"
   },
@@ -15,11 +16,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ws": "^6.1.2"
+    "express": "4.16.4",
+    "mongodb": "3.1.12",
+    "ws": "6.1.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "flow-bin": "^0.91.0",
-    "flow-remove-types": "^1.2.3"
+    "flow-bin": "0.91.0",
+    "flow-remove-types": "1.2.3",
+    "flow-typed": "2.5.1"
   }
 }
