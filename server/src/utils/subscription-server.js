@@ -1,4 +1,4 @@
-/* @flow */
+// @flow
 
 import WebSocket from 'ws';
 import type { Server as HTTPServer, IncomingMessage } from 'http';
