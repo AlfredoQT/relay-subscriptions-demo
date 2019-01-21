@@ -1,13 +1,12 @@
 /* @flow */
 
-const WebSocket = require('ws');
-const http = require('http');
-const https = require('https');
-const { Buffer } = require('buffer');
+import WebSocket from 'ws';
+import type { Server as HTTPServer, IncomingMessage } from 'http';
+import type { Server as HTTPSServer } from 'https';
 
 type VerifyClientInfo = {
   origin: string,
-  req: http.IncomingMessage,
+  req: IncomingMessage,
   secure: boolean
 };
 
@@ -46,7 +45,7 @@ type PerMessageDeflate = {
 type ServerOptions = {
   host?: string,
   port?: number,
-  server?: http.Server | https.Server,
+  server?: HTTPServer | HTTPSServer,
   clientTracking?: boolean,
   backlog?: number,
   verifyClient?: (
@@ -55,7 +54,7 @@ type ServerOptions = {
   ) => boolean,
   handleProtocols?: (
     protocols: Array<string>,
-    request: http.IncomingMessage
+    request: IncomingMessage
   ) => string | boolean,
   path?: string,
   noServer?: boolean,

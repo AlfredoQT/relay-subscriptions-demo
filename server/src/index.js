@@ -1,6 +1,6 @@
-const http = require('http');
-const express = require('express');
-const SubscriptionServer = require('./utils/subscription-server');
+import http from 'http';
+import express from 'express';
+import SubscriptionServer from './utils/subscription-server';
 
 const server = http.createServer(express());
 
