@@ -30,11 +30,13 @@ function changeStreamToAsyncIterator(
       if (changeStream.isClosed()) {
         return this.return();
       }
-
-      return changeStream.next().then(data => ({
-        value: data.fullDocument || data.documentKey,
-        done: false
-      }));
+      return changeStream.next().then(data => {
+        if (!data.fullDocument) {
+          return { value: null, done: false };
+        }
+        const { _id: id, ...noId } = data.fullDocument;
+        return { value: { id, ...noId }, done: false };
+      });
     },
     return() {
       if (changeStream.isClosed()) {

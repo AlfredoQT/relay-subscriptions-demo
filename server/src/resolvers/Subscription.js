@@ -1,14 +1,15 @@
-import changeStremToAsyncIterator from '../utils/changeStreamToAsyncIterator';
+import changeStreamToAsyncIterator from '../utils/changeStreamToAsyncIterator';
 
 const newClient = {
   subscribe: () =>
-    changeStremToAsyncIterator('clients', [
+    changeStreamToAsyncIterator('clients', [
       {
         $match: {
           operationType: 'insert'
         }
       }
-    ])
+    ]),
+  resolve: payload => payload
 };
 
 export default {

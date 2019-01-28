@@ -23,10 +23,13 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-async-generator-functions": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "flow-bin": "0.91.0",
-    "flow-typed": "2.5.1"
+    "flow-typed": "2.5.1",
+    "i": "^0.3.6",
+    "npm": "^6.7.0"
   }
 }

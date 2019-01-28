@@ -5,8 +5,8 @@ function clients(parent, args, context, info) {
     .toArray()
     .then(results => {
       return results.map(result => {
-        const { _id, ...noId } = result;
-        return { id: _id, ...noId };
+        const { _id: id, ...noId } = result;
+        return { id, ...noId };
       });
     });
 }

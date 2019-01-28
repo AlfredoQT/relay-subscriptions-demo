@@ -7,7 +7,7 @@ initDb(
   'mongodb+srv://admin:admin@clustertest-wgpdz.mongodb.net/carseg?retryWrites=true',
   'carseg'
 )
-  .then(() => {
+  .then(async () => {
     const graphServer = new GraphQLServer({
       context: { db: getDb() },
       typeDefs: './src/schema.graphql',
