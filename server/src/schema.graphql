@@ -1,0 +1,28 @@
+type Query {
+  clients: [Client!]!
+}
+
+type Mutation {
+  createClient(input: CreateClientInput!): Client
+}
+
+type Subscription {
+  newClient: Client!
+}
+
+type Client {
+  id: ID!
+  name: String!
+  streetAddress: String!
+  addressLine: String
+  city: String!
+  zipCode: String!
+}
+
+input CreateClientInput {
+  name: String!
+  streetAddress: String!
+  addressLine: String
+  city: String!
+  zipCode: String!
+}

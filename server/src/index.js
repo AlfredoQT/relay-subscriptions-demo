@@ -1,13 +1,20 @@
-// @flow
+import 'babel-polyfill';
+import { GraphQLServer } from 'graphql-yoga';
+import { initDb, getDb } from './db';
+import resolvers from './resolvers';
 
-const http = require('http');
-const express = require('express');
-const SubscriptionServer = require('./utils/subscription-server');
-
-const server = http.createServer(express());
-
-const subscriptionServer = new SubscriptionServer({
-  server
-});
-
-server.listen(4000, () => console.log('Server'));
+initDb(
+  'mongodb+srv://admin:admin@clustertest-wgpdz.mongodb.net/carseg?retryWrites=true',
+  'carseg'
+)
+  .then(() => {
+    const graphServer = new GraphQLServer({
+      context: { db: getDb() },
+      typeDefs: './src/schema.graphql',
+      resolvers
+    });
+    graphServer.start(() => console.log('Graph server started'));
+  })
+  .catch(err => {
+    console.log(err);
+  });
