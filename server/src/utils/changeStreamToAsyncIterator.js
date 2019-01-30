@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 import { $$asyncIterator } from 'iterall';
 import type { Collection, ReadPreference } from 'mongodb';
@@ -12,17 +12,17 @@ type ChangeStreamOptions = {
   readPreference?: ReadPreference
 };
 
-function changeStreamToAsyncIterator(
+function changeStreamToAsyncIterator<T>(
   collection: Collection,
   pipeline?: Array<{}>,
   options?: ChangeStreamOptions
-) {
+): AsyncIterator<T> {
   const pipelineArg = pipeline || [];
   const optionsArg = options || {};
 
   const changeStream = collection.watch(pipelineArg, optionsArg);
 
-  return {
+  return ({
     next() {
       if (changeStream.isClosed()) {
         return this.return();
@@ -43,6 +43,7 @@ function changeStreamToAsyncIterator(
         .close()
         .then(() => ({ value: undefined, done: true }));
     },
+    // $FlowFixMe(>=0.91.0)
     throw(error: Error) {
       if (!changeStream.isClosed()) {
         changeStream.close(); // Remove this hack
@@ -52,7 +53,7 @@ function changeStreamToAsyncIterator(
     [$$asyncIterator]() {
       return this;
     }
-  };
+  }: any);
 }
 
 export default changeStreamToAsyncIterator;

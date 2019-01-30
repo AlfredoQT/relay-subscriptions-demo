@@ -8,3 +8,4 @@ module.file_ext=.mjs
 module.file_ext=.js
 module.file_ext=.jsx
 module.file_ext=.json
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
