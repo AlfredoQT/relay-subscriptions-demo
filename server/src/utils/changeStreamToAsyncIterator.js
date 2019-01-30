@@ -1,29 +1,26 @@
 // @flow
-import { $$asyncIterator } from 'iterall';
-import type { ReadPreference } from 'mongodb';
 
-import { getDb } from '../db';
+import { $$asyncIterator } from 'iterall';
+import type { Collection, ReadPreference } from 'mongodb';
 
 type ChangeStreamOptions = {
   fullDocument?: 'default' | 'updateLookup',
   maxAwaitTimeMS?: number,
-  resumeAfter?: mixed,
+  resumeAfter?: {},
   batchSize?: number,
-  collation?: mixed,
+  collation?: {},
   readPreference?: ReadPreference
 };
 
 function changeStreamToAsyncIterator(
-  collection: string,
-  pipeline?: Array<mixed>,
+  collection: Collection,
+  pipeline?: Array<{}>,
   options?: ChangeStreamOptions
 ) {
   const pipelineArg = pipeline || [];
   const optionsArg = options || {};
 
-  const changeStream = getDb()
-    .collection(collection)
-    .watch(pipelineArg, optionsArg);
+  const changeStream = collection.watch(pipelineArg, optionsArg);
 
   return {
     next() {

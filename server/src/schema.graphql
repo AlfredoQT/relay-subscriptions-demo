@@ -1,28 +1,50 @@
+scalar Date
+
 type Query {
-  clients: [Client!]!
+  listItems: [Item!]!
+  listApplicants(filter: ApplicantFilterInput): [Applicant!]!
 }
 
 type Mutation {
-  createClient(input: CreateClientInput!): Client
+  createItem(input: CreateItemInput!): Item!
+  updateItem(input: UpdateItemInput!): Item!
 }
 
 type Subscription {
-  newClient: Client!
+  onCreateItem: Item!
 }
 
-type Client {
+type Item {
   id: ID!
   name: String!
-  streetAddress: String!
-  addressLine: String
-  city: String!
-  zipCode: String!
+  quantity: String!
+  requests: [Request!]!
 }
 
-input CreateClientInput {
+input CreateItemInput {
   name: String!
-  streetAddress: String!
-  addressLine: String
-  city: String!
-  zipCode: String!
+  quantity: Int!
+}
+
+input UpdateItemInput {
+  id: ID!
+  name: String
+  quantity: Int
+}
+
+type Applicant {
+  id: ID!
+  registrationNumber: String!
+  requests: [Request!]!
+}
+
+type Request {
+  id: ID!
+  applicant: Applicant!
+  item: Item!
+  dateRequested: Date!
+}
+
+input ApplicantFilterInput {
+  registrationNumber: String
 }

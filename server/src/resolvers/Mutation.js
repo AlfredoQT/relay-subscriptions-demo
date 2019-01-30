@@ -1,13 +1,12 @@
-function createClient(parent, args, context, info) {
-  const { name, streetAddress, addressLine, city, zipCode } = args.input;
+import buildObjectFromQuery from '../utils/buildObjectFromQuery';
+
+function createItem(parent, args, context, info) {
+  const { name, quantity } = args.input;
   return context.db
-    .collection('clients')
+    .collection('items')
     .insertOne({
       name,
-      streetAddress,
-      addressLine,
-      city,
-      zipCode
+      quantity
     })
     .then(result => {
       const { _id, ...noId } = result.ops[0];
@@ -15,6 +14,27 @@ function createClient(parent, args, context, info) {
     });
 }
 
+function updateItem(parent, args, context, info) {
+  const update = buildObjectFromQuery(args.input, ['name', 'quantity']);
+
+  return context.db
+    .collection('items')
+    .findOneAndUpdate(
+      {
+        _id: args.input.id
+      },
+      update,
+      {
+        returnNewDocument: true
+      }
+    )
+    .then(result => {
+      const { _id, ...noId } = result;
+      return { id: _id, ...noId };
+    });
+}
+
 export default {
-  createClient
+  createItem,
+  updateItem
 };

@@ -1,8 +1,8 @@
 import changeStreamToAsyncIterator from '../utils/changeStreamToAsyncIterator';
 
-const newClient = {
-  subscribe: () =>
-    changeStreamToAsyncIterator('clients', [
+const onCreateItem = {
+  subscribe: (parent, args, context, info) =>
+    changeStreamToAsyncIterator(db.collection('items'), [
       {
         $match: {
           operationType: 'insert'
@@ -13,5 +13,5 @@ const newClient = {
 };
 
 export default {
-  newClient
+  onCreateItem
 };

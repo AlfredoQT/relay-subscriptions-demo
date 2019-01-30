@@ -4,12 +4,12 @@ import { initDb, getDb } from './db';
 import resolvers from './resolvers';
 
 initDb(
-  'mongodb+srv://admin:admin@clustertest-wgpdz.mongodb.net/carseg?retryWrites=true',
-  'carseg'
+  'mongodb+srv://admin:admin@clustertest-wgpdz.mongodb.net/inventory?retryWrites=true',
+  'inventory'
 )
-  .then(async () => {
+  .then(db => {
     const graphServer = new GraphQLServer({
-      context: { db: getDb() },
+      context: { db },
       typeDefs: './src/schema.graphql',
       resolvers
     });
