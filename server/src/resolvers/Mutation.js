@@ -4,11 +4,14 @@ import buildObjectFromQuery from '../utils/buildObjectFromQuery';
 
 function createItem(parent, args, context, info) {
   const { name, quantity } = args.input;
-  return context.db.collection('items').insertOne({
-    name,
-    quantity,
-    requests: []
-  });
+  return context.db
+    .collection('items')
+    .insertOne({
+      name,
+      quantity,
+      requests: []
+    })
+    .then(result => result.ops[0]);
 }
 
 function updateItem(parent, args, context, info) {
@@ -26,10 +29,13 @@ function updateItem(parent, args, context, info) {
 
 function createApplicant(parent, args, context, info) {
   const { registrationNumber } = args.input;
-  return context.db.collection('applicants').insertOne({
-    registrationNumber: registrationNumber.toUpperCase(),
-    requests: []
-  });
+  return context.db
+    .collection('applicants')
+    .insertOne({
+      registrationNumber: registrationNumber.toUpperCase(),
+      requests: []
+    })
+    .then(result => result.ops[0]);
 }
 
 function createRequest(parent, args, context, info) {
@@ -58,7 +64,7 @@ function createRequest(parent, args, context, info) {
           $push: { requests: result.ops[0]._id }
         }
       );
-      return result;
+      return result.ops[0];
     });
 }
 
