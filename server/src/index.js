@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import { GraphQLServer } from 'graphql-yoga';
-import { initDb, getDb } from './db';
+import { initDb } from './db';
 import resolvers from './resolvers';
 
 initDb(

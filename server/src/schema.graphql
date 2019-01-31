@@ -8,6 +8,8 @@ type Query {
 type Mutation {
   createItem(input: CreateItemInput!): Item!
   updateItem(input: UpdateItemInput!): Item!
+  createApplicant(input: CreateApplicantInput!): Applicant!
+  createRequest(input: CreateRequestInput!): Request!
 }
 
 type Subscription {
@@ -30,6 +32,15 @@ input UpdateItemInput {
   id: ID!
   name: String
   quantity: Int
+}
+
+input CreateApplicantInput {
+  registrationNumber: String!
+}
+
+input CreateRequestInput {
+  item: ID!
+  applicant: ID!
 }
 
 type Applicant {
