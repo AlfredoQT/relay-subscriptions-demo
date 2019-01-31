@@ -1,0 +1,61 @@
+scalar Date
+
+type Query {
+  listItems: [Item!]!
+  listApplicants(filter: ApplicantFilterInput): [Applicant!]!
+}
+
+type Mutation {
+  createItem(input: CreateItemInput!): Item!
+  updateItem(input: UpdateItemInput!): Item!
+  createApplicant(input: CreateApplicantInput!): Applicant!
+  createRequest(input: CreateRequestInput!): Request!
+}
+
+type Subscription {
+  onCreateItem: Item!
+}
+
+type Item {
+  id: ID!
+  name: String!
+  quantity: String!
+  requests: [Request!]!
+}
+
+input CreateItemInput {
+  name: String!
+  quantity: Int!
+}
+
+input UpdateItemInput {
+  id: ID!
+  name: String
+  quantity: Int
+}
+
+input CreateApplicantInput {
+  registrationNumber: String!
+}
+
+input CreateRequestInput {
+  item: ID!
+  applicant: ID!
+}
+
+type Applicant {
+  id: ID!
+  registrationNumber: String!
+  requests: [Request!]!
+}
+
+type Request {
+  id: ID!
+  applicant: Applicant!
+  item: Item!
+  dateRequested: Date!
+}
+
+input ApplicantFilterInput {
+  registrationNumber: String
+}
