@@ -11,10 +11,10 @@ type Query {
 }
 
 type Mutation {
-  createItem(input: CreateItemInput!): Item!
-  updateItem(input: UpdateItemInput!): Item!
-  createApplicant(input: CreateApplicantInput!): Applicant!
-  createRequest(input: CreateRequestInput!): Request!
+  createItem(input: CreateItemInput!): ItemPayload!
+  updateItem(input: UpdateItemInput!): ItemPayload!
+  createApplicant(input: CreateApplicantInput!): ApplicantPayload!
+  createRequest(input: CreateRequestInput!): RequestPayload!
 }
 
 type Subscription {
@@ -26,6 +26,11 @@ type Item implements Node {
   name: String!
   quantity: Int!
   requests: [Request!]!
+}
+
+type ItemPayload {
+  clientMutationId: String
+  item: Item
 }
 
 input CreateItemInput {
@@ -51,10 +56,22 @@ input CreateRequestInput {
   applicant: ID!
 }
 
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
 type Applicant implements Node {
   id: ID!
   registrationNumber: String!
   requests: [Request!]!
+}
+
+type ApplicantPayload {
+  clientMutationId: String
+  applicant: Applicant
 }
 
 type Request implements Node {
@@ -62,6 +79,11 @@ type Request implements Node {
   applicant: Applicant!
   item: Item!
   dateRequested: Date!
+}
+
+type RequestPayload {
+  clientMutationId: String
+  request: Request
 }
 
 input ApplicantFilterInput {

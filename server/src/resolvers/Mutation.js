@@ -3,7 +3,7 @@ import { ObjectID } from 'mongodb';
 import buildObjectFromQuery from '../utils/buildObjectFromQuery';
 
 function createItem(parent, args, context, info) {
-  const { name, quantity } = args.input;
+  const { name, quantity, clientMutationId } = args.input;
   return context.db
     .collection('items')
     .insertOne({
@@ -12,24 +12,30 @@ function createItem(parent, args, context, info) {
       requests: [],
       __type: 'Item'
     })
-    .then(result => result.ops[0]);
+    .then(result => ({ item: result.ops[0], clientMutationId }));
 }
 
 function updateItem(parent, args, context, info) {
   const update = buildObjectFromQuery(args.input, ['name', 'quantity']);
-  return context.db.collection('items').findOneAndUpdate(
-    {
-      _id: ObjectID.createFromHexString(args.input.id)
-    },
-    { $set: update },
-    {
-      returnOriginal: false
-    }
-  );
+  return context.db
+    .collection('items')
+    .findOneAndUpdate(
+      {
+        _id: ObjectID.createFromHexString(args.input.id)
+      },
+      { $set: update },
+      {
+        returnOriginal: false
+      }
+    )
+    .then(response => ({
+      item: response,
+      clientMutationId: args.input.clientMutationId
+    }));
 }
 
 function createApplicant(parent, args, context, info) {
-  const { registrationNumber } = args.input;
+  const { registrationNumber, clientMutationId } = args.input;
   return context.db
     .collection('applicants')
     .insertOne({
@@ -37,11 +43,11 @@ function createApplicant(parent, args, context, info) {
       requests: [],
       __type: 'Applicant'
     })
-    .then(result => result.ops[0]);
+    .then(result => ({ applicant: result.ops[0], clientMutationId }));
 }
 
 function createRequest(parent, args, context, info) {
-  const { applicant, item } = args.input;
+  const { applicant, item, clientMutationId } = args.input;
   return context.db
     .collection('requests')
     .insertOne({
@@ -67,7 +73,7 @@ function createRequest(parent, args, context, info) {
           $push: { requests: result.ops[0]._id }
         }
       );
-      return result.ops[0];
+      return { request: result.ops[0], clientMutationId };
     });
 }
 

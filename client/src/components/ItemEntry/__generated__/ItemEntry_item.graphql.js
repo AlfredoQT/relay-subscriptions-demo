@@ -13,7 +13,7 @@ declare export opaque type ItemEntry_item$ref: FragmentReference;
 export type ItemEntry_item = {|
   +id: string,
   +name: string,
-  +quantity: string,
+  +quantity: number,
   +$refType: ItemEntry_item$ref,
 |};
 */

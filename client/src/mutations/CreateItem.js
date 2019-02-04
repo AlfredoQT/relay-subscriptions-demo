@@ -3,18 +3,26 @@ import { commitMutation, graphql } from 'react-relay';
 const mutation = graphql`
   mutation CreateItemMutation($input: CreateItemInput!) {
     createItem(input: $input) {
-      id
-      name
-      quantity
+      item {
+        id
+        name
+        quantity
+      }
     }
   }
 `;
 
-function createItem(environment, input) {
+function CreateItem(environment, input) {
   commitMutation(environment, {
     variables: { input },
-    mutation: mutation
+    mutation: mutation,
+    updater: store => {
+      const createItem = store.getRootField('createItem');
+      const newItem = createItem.getLinkedRecord('item');
+      const prevItems = store.getRoot().getLinkedRecords('listItems');
+      store.getRoot().setLinkedRecords([...prevItems, newItem], 'listItems');
+    }
   });
 }
 
-export default createItem;
+export default CreateItem;

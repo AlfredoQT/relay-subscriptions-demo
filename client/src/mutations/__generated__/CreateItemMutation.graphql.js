@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash d6297924fa1ac02e4a3b08aae02a01be
+ * @relayHash 4fc1989373dd9974e3e94658a526a4f9
  */
 
 /* eslint-disable */
@@ -10,6 +10,7 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 export type CreateItemInput = {|
+  clientMutationId?: ?string,
   name: string,
   quantity: number,
 |};
@@ -18,9 +19,11 @@ export type CreateItemMutationVariables = {|
 |};
 export type CreateItemMutationResponse = {|
   +createItem: {|
-    +id: string,
-    +name: string,
-    +quantity: string,
+    +item: ?{|
+      +id: string,
+      +name: string,
+      +quantity: number,
+    |}
   |}
 |};
 export type CreateItemMutation = {|
@@ -34,9 +37,11 @@ mutation CreateItemMutation(
   $input: CreateItemInput!
 ) {
   createItem(input: $input) {
-    id
-    name
-    quantity
+    item {
+      id
+      name
+      quantity
+    }
   }
 }
 */
@@ -64,29 +69,40 @@ const node /*: ConcreteRequest*/ = (function() {
             type: 'CreateItemInput!'
           }
         ],
-        concreteType: 'Item',
+        concreteType: 'ItemPayload',
         plural: false,
         selections: [
           {
-            kind: 'ScalarField',
+            kind: 'LinkedField',
             alias: null,
-            name: 'id',
+            name: 'item',
+            storageKey: null,
             args: null,
-            storageKey: null
-          },
-          {
-            kind: 'ScalarField',
-            alias: null,
-            name: 'name',
-            args: null,
-            storageKey: null
-          },
-          {
-            kind: 'ScalarField',
-            alias: null,
-            name: 'quantity',
-            args: null,
-            storageKey: null
+            concreteType: 'Item',
+            plural: false,
+            selections: [
+              {
+                kind: 'ScalarField',
+                alias: null,
+                name: 'id',
+                args: null,
+                storageKey: null
+              },
+              {
+                kind: 'ScalarField',
+                alias: null,
+                name: 'name',
+                args: null,
+                storageKey: null
+              },
+              {
+                kind: 'ScalarField',
+                alias: null,
+                name: 'quantity',
+                args: null,
+                storageKey: null
+              }
+            ]
           }
         ]
       }
@@ -112,11 +128,11 @@ const node /*: ConcreteRequest*/ = (function() {
       name: 'CreateItemMutation',
       id: null,
       text:
-        'mutation CreateItemMutation(\n  $input: CreateItemInput!\n) {\n  createItem(input: $input) {\n    id\n    name\n    quantity\n  }\n}\n',
+        'mutation CreateItemMutation(\n  $input: CreateItemInput!\n) {\n  createItem(input: $input) {\n    item {\n      id\n      name\n      quantity\n    }\n  }\n}\n',
       metadata: {}
     }
   };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '3edf56c196da4814a7535d194e7baf15';
+(node/*: any*/).hash = 'fbbb2520e5b66f084bbdb107cb5d2075';
 module.exports = node;
