@@ -1,6 +1,7 @@
 import { ObjectID } from 'mongodb';
 
 import buildObjectFromQuery from '../utils/buildObjectFromQuery';
+import { fromGlobalId } from '../utils/globalId';
 
 function createItem(parent, args, context, info) {
   const { name, quantity, clientMutationId } = args.input;
@@ -17,11 +18,12 @@ function createItem(parent, args, context, info) {
 
 function updateItem(parent, args, context, info) {
   const update = buildObjectFromQuery(args.input, ['name', 'quantity']);
+  const { id } = fromGlobalId(args.input.id);
   return context.db
     .collection('items')
     .findOneAndUpdate(
       {
-        _id: ObjectID.createFromHexString(args.input.id)
+        _id: ObjectID.createFromHexString(id)
       },
       { $set: update },
       {
@@ -29,7 +31,7 @@ function updateItem(parent, args, context, info) {
       }
     )
     .then(response => ({
-      item: response,
+      item: response.value,
       clientMutationId: args.input.clientMutationId
     }));
 }
