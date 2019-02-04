@@ -1,5 +1,7 @@
+import { toGlobalId } from '../utils/globalId';
+
 function id(parent, args, context, info) {
-  return parent._id;
+  return toGlobalId(info.parentType.name, parent._id);
 }
 
 function applicant(parent, args, context, info) {

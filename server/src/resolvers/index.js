@@ -2,9 +2,10 @@ import Query from './Query';
 import Mutation from './Mutation';
 import Subscription from './Subscription';
 import Date from './Date';
+import Request from './Request';
+import Node from './Node';
 import Item from './Item';
 import Applicant from './Applicant';
-import Request from './Request';
 
 export default {
   Query,
@@ -13,5 +14,6 @@ export default {
   Date,
   Item,
   Applicant,
-  Request
+  Request,
+  Node
 };

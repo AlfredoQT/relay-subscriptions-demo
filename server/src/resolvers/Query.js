@@ -1,8 +1,22 @@
+import { ObjectID } from 'mongodb';
+
+import { fromGlobalId } from '../utils/globalId';
+
 function listItems(parent, args, context, info) {
   return context.db
     .collection('items')
     .find({})
     .toArray();
+}
+
+function node(parent, args, context, info) {
+  // Extract the type and id
+  const { type, id } = fromGlobalId(args.id);
+  return context.db
+    .collection(`${type[0].toLowerCase()}${type.substring(1)}s`)
+    .findOne({
+      _id: ObjectID.createFromHexString(id)
+    });
 }
 
 function listApplicants(parent, args, context, info) {
@@ -23,5 +37,6 @@ function listApplicants(parent, args, context, info) {
 
 export default {
   listItems,
-  listApplicants
+  listApplicants,
+  node
 };

@@ -1,5 +1,8 @@
+import { toGlobalId } from '../utils/globalId';
+
 function id(parent, args, context, info) {
-  return parent._id;
+  // To be able to get the type on the node
+  return toGlobalId(info.parentType.name, parent._id);
 }
 
 function requests(parent, args, context, info) {

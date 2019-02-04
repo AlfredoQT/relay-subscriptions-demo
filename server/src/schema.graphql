@@ -1,8 +1,13 @@
 scalar Date
 
+interface Node {
+  id: ID!
+}
+
 type Query {
   listItems: [Item!]!
   listApplicants(filter: ApplicantFilterInput): [Applicant!]!
+  node(id: ID!): Node
 }
 
 type Mutation {
@@ -16,14 +21,15 @@ type Subscription {
   onCreateItem: Item!
 }
 
-type Item {
+type Item implements Node {
   id: ID!
   name: String!
-  quantity: String!
+  quantity: Int!
   requests: [Request!]!
 }
 
 input CreateItemInput {
+  clientMutationId: String
   name: String!
   quantity: Int!
 }
@@ -35,21 +41,23 @@ input UpdateItemInput {
 }
 
 input CreateApplicantInput {
+  clientMutationId: String
   registrationNumber: String!
 }
 
 input CreateRequestInput {
+  clientMutationId: String
   item: ID!
   applicant: ID!
 }
 
-type Applicant {
+type Applicant implements Node {
   id: ID!
   registrationNumber: String!
   requests: [Request!]!
 }
 
-type Request {
+type Request implements Node {
   id: ID!
   applicant: Applicant!
   item: Item!

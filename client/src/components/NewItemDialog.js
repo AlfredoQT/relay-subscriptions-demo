@@ -13,9 +13,17 @@ function Transition(props) {
   return <Slide direction="right" {...props} />;
 }
 
-function NewItemDialog({ open, onClose }) {
+function NewItemDialog({ open, onClose, onAdd }) {
   const [name, setName] = useState('');
   const [quantity, setQuantity] = useState(1);
+
+  function handleAdd() {
+    onAdd({
+      name,
+      quantity: Number.parseInt(quantity, 10)
+    });
+  }
+
   return (
     <Dialog
       open={open}
@@ -61,7 +69,7 @@ function NewItemDialog({ open, onClose }) {
         <Button onClick={onClose} color="primary">
           Cancelar
         </Button>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={handleAdd} color="primary">
           Añadir
         </Button>
       </DialogActions>
@@ -71,7 +79,8 @@ function NewItemDialog({ open, onClose }) {
 
 NewItemDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired
 };
 
 export default NewItemDialog;

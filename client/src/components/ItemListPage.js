@@ -7,6 +7,7 @@ import ItemList from './ItemList';
 import Button from '@material-ui/core/Button';
 import NewItemDialog from './NewItemDialog';
 import Spinner from './Spinner';
+import CreateItem from '../mutations/CreateItem';
 
 const ItemListPageQuery = graphql`
   query ItemListPageQuery {
@@ -24,6 +25,11 @@ function ItemListPage() {
   }
 
   function handleClose() {
+    setOpen(false);
+  }
+
+  function handleAdd(input) {
+    CreateItem(environment, input);
     setOpen(false);
   }
 
@@ -59,7 +65,11 @@ function ItemListPage() {
               </Button>
               {/* eslint-disable-next-line react/prop-types */}
               <ItemList listItems={props.listItems} />
-              <NewItemDialog open={open} onClose={handleClose} />
+              <NewItemDialog
+                open={open}
+                onClose={handleClose}
+                onAdd={handleAdd}
+              />
             </section>
           );
         }

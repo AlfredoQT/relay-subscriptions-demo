@@ -9,7 +9,8 @@ function createItem(parent, args, context, info) {
     .insertOne({
       name,
       quantity,
-      requests: []
+      requests: [],
+      __type: 'Item'
     })
     .then(result => result.ops[0]);
 }
@@ -33,7 +34,8 @@ function createApplicant(parent, args, context, info) {
     .collection('applicants')
     .insertOne({
       registrationNumber: registrationNumber.toUpperCase(),
-      requests: []
+      requests: [],
+      __type: 'Applicant'
     })
     .then(result => result.ops[0]);
 }
@@ -45,7 +47,8 @@ function createRequest(parent, args, context, info) {
     .insertOne({
       applicant: ObjectID.createFromHexString(applicant),
       item: ObjectID.createFromHexString(item),
-      dateRequested: new Date(Date.now())
+      dateRequested: new Date(Date.now()),
+      __type: 'Request'
     })
     .then(async result => {
       await context.db.collection('items').updateOne(
