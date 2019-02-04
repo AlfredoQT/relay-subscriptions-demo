@@ -1,5 +1,4 @@
 import { commitMutation, graphql } from 'react-relay';
-import { ConnectionHandler } from 'relay-runtime';
 
 const mutation = graphql`
   mutation CreateItemMutation($input: CreateItemInput!) {
@@ -14,10 +13,7 @@ const mutation = graphql`
 function createItem(environment, input) {
   commitMutation(environment, {
     variables: { input },
-    mutation: mutation,
-    updater: store => {
-      const payload = store.getRootField('createItem');
-    }
+    mutation: mutation
   });
 }
 
