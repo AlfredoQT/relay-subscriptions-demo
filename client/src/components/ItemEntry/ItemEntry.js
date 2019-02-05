@@ -7,7 +7,10 @@ import UpdateItem from '../../mutations/UpdateItem';
 import './ItemEntry.css';
 import environment from '../../Environment';
 
-function ItemEntry({ item }) {
+import Icon from '../Icon';
+import ChevronRight from '../icons/ChevronRight';
+
+function ItemEntry({ item, onDelete }) {
   function handleModifyQuantity(quantity) {
     UpdateItem(environment, {
       id: item.id,
@@ -38,18 +41,40 @@ function ItemEntry({ item }) {
           </Button>
         </div>
         <span className="ItemListItemInformationName">{item.name}</span>
-        {/* <Icon
+        <Icon
           path={ChevronRight}
           size={1.5}
           className="ItemListItemGoToDetails"
-        /> */}
+        />
+      </div>
+      <div>
+        <Button
+          variant="contained"
+          style={{
+            marginRight: 12
+          }}
+        >
+          Pedir
+        </Button>
+        <Button
+          variant="contained"
+          style={{
+            marginRight: 12
+          }}
+        >
+          Regresar
+        </Button>
+        <Button variant="contained" onClick={() => onDelete(item)}>
+          Eliminar
+        </Button>
       </div>
     </li>
   );
 }
 
 ItemEntry.propTypes = {
-  item: PropTypes.object.isRequired
+  item: PropTypes.object.isRequired,
+  onDelete: PropTypes.func.isRequired
 };
 
 export default createFragmentContainer(

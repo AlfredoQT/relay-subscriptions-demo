@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e3c6655d13ccfa7b7510819925ded9fb
+ * @relayHash daa71e3e99b5f5eabc3d4cef69d39b77
  */
 
 /* eslint-disable */
@@ -9,36 +9,32 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type UpdateItemInput = {|
-  id: string,
-  name?: ?string,
-  quantity?: ?number,
+export type DeleteItemInput = {|
+  id: string
 |};
-export type UpdateItemMutationVariables = {|
-  input: UpdateItemInput
+export type DeleteItemMutationVariables = {|
+  input: DeleteItemInput
 |};
-export type UpdateItemMutationResponse = {|
-  +updateItem: {|
+export type DeleteItemMutationResponse = {|
+  +deleteItem: {|
     +item: ?{|
-      +id: string,
-      +quantity: number,
+      +id: string
     |}
   |}
 |};
-export type UpdateItemMutation = {|
-  variables: UpdateItemMutationVariables,
-  response: UpdateItemMutationResponse,
+export type DeleteItemMutation = {|
+  variables: DeleteItemMutationVariables,
+  response: DeleteItemMutationResponse,
 |};
 */
 
 /*
-mutation UpdateItemMutation(
-  $input: UpdateItemInput!
+mutation DeleteItemMutation(
+  $input: DeleteItemInput!
 ) {
-  updateItem(input: $input) {
+  deleteItem(input: $input) {
     item {
       id
-      quantity
     }
   }
 }
@@ -49,7 +45,7 @@ const node /*: ConcreteRequest*/ = (function() {
       {
         kind: 'LocalArgument',
         name: 'input',
-        type: 'UpdateItemInput!',
+        type: 'DeleteItemInput!',
         defaultValue: null
       }
     ],
@@ -57,14 +53,14 @@ const node /*: ConcreteRequest*/ = (function() {
       {
         kind: 'LinkedField',
         alias: null,
-        name: 'updateItem',
+        name: 'deleteItem',
         storageKey: null,
         args: [
           {
             kind: 'Variable',
             name: 'input',
             variableName: 'input',
-            type: 'UpdateItemInput!'
+            type: 'DeleteItemInput!'
           }
         ],
         concreteType: 'ItemPayload',
@@ -85,13 +81,6 @@ const node /*: ConcreteRequest*/ = (function() {
                 name: 'id',
                 args: null,
                 storageKey: null
-              },
-              {
-                kind: 'ScalarField',
-                alias: null,
-                name: 'quantity',
-                args: null,
-                storageKey: null
               }
             ]
           }
@@ -102,7 +91,7 @@ const node /*: ConcreteRequest*/ = (function() {
     kind: 'Request',
     fragment: {
       kind: 'Fragment',
-      name: 'UpdateItemMutation',
+      name: 'DeleteItemMutation',
       type: 'Mutation',
       metadata: null,
       argumentDefinitions: (v0 /*: any*/),
@@ -110,20 +99,20 @@ const node /*: ConcreteRequest*/ = (function() {
     },
     operation: {
       kind: 'Operation',
-      name: 'UpdateItemMutation',
+      name: 'DeleteItemMutation',
       argumentDefinitions: (v0 /*: any*/),
       selections: (v1 /*: any*/)
     },
     params: {
       operationKind: 'mutation',
-      name: 'UpdateItemMutation',
+      name: 'DeleteItemMutation',
       id: null,
       text:
-        'mutation UpdateItemMutation(\n  $input: UpdateItemInput!\n) {\n  updateItem(input: $input) {\n    item {\n      id\n      quantity\n    }\n  }\n}\n',
+        'mutation DeleteItemMutation(\n  $input: DeleteItemInput!\n) {\n  deleteItem(input: $input) {\n    item {\n      id\n    }\n  }\n}\n',
       metadata: {}
     }
   };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '0a2afa6f258b9510c3feaf0c1e1e0f13';
+(node/*: any*/).hash = 'c4d8045d3860c99cb40b9a0ee23427b3';
 module.exports = node;

@@ -36,6 +36,25 @@ function updateItem(parent, args, context, info) {
     }));
 }
 
+function deleteItem(parent, args, context, info) {
+  const { id } = fromGlobalId(args.input.id);
+  return context.db
+    .collection('items')
+    .findOneAndDelete({
+      _id: ObjectID.createFromHexString(id)
+    })
+    .then(async response => {
+      await context.db.collection('requests').deleteMany({
+        item: response.value._id
+      });
+      return response;
+    })
+    .then(response => ({
+      item: response.value,
+      clientMutationId: args.input.clientMutationId
+    }));
+}
+
 function createApplicant(parent, args, context, info) {
   const { registrationNumber, clientMutationId } = args.input;
   return context.db
@@ -83,5 +102,6 @@ export default {
   createItem,
   updateItem,
   createApplicant,
-  createRequest
+  createRequest,
+  deleteItem
 };

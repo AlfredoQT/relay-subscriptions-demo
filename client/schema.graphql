@@ -13,6 +13,7 @@ type Query {
 type Mutation {
   createItem(input: CreateItemInput!): ItemPayload!
   updateItem(input: UpdateItemInput!): ItemPayload!
+  deleteItem(input: DeleteItemInput!): ItemPayload!
   createApplicant(input: CreateApplicantInput!): ApplicantPayload!
   createRequest(input: CreateRequestInput!): RequestPayload!
 }
@@ -56,6 +57,10 @@ input CreateRequestInput {
   applicant: ID!
 }
 
+input DeleteItemInput {
+  id: ID!
+}
+
 type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
@@ -79,6 +84,8 @@ type Request implements Node {
   applicant: Applicant!
   item: Item!
   dateRequested: Date!
+  delivered: Boolean!
+  dateDelivered: Boolean!
 }
 
 type RequestPayload {

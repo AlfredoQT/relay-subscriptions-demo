@@ -5,7 +5,6 @@ const mutation = graphql`
     updateItem(input: $input) {
       item {
         id
-        name
         quantity
       }
     }
@@ -20,9 +19,7 @@ function UpdateItem(environment, input) {
       const updateItem = store.getRootField('updateItem');
       const updatedItem = updateItem.getLinkedRecord('item');
       const id = updatedItem.getValue('id');
-      const name = updatedItem.getValue('name');
       const quantity = updatedItem.getValue('quantity');
-      store.get(id).setValue(name, 'name');
       store.get(id).setValue(quantity, 'quantity');
     }
   });
