@@ -19,24 +19,16 @@ function node(parent, args, context, info) {
     });
 }
 
-function listApplicants(parent, args, context, info) {
-  let findFilter = {};
-  if (args.filter && args.filter.registrationNumber) {
-    const registrationNumber = args.filter.registrationNumber
-      .toUpperCase()
-      .replace(/[^\w\s]/g, '');
-    findFilter = {
-      registrationNumber: { $regex: new RegExp(registrationNumber) }
-    };
-  }
-  return context.db
-    .collection('applicants')
-    .find(findFilter)
-    .toArray();
+function getItem(parent, args, context, info) {
+  // Extract the type and id
+  const { type, id } = fromGlobalId(args.id);
+  return context.db.collection('items').findOne({
+    _id: ObjectID.createFromHexString(id)
+  });
 }
 
 export default {
   listItems,
-  listApplicants,
-  node
+  node,
+  getItem
 };

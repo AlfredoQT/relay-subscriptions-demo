@@ -68,33 +68,59 @@ function createApplicant(parent, args, context, info) {
 }
 
 function createRequest(parent, args, context, info) {
-  const { applicant, item, clientMutationId } = args.input;
+  const { applicant, item, clientMutationId, quantity } = args.input;
+  const { id: parsedItemId } = fromGlobalId(item);
+
   return context.db
-    .collection('requests')
-    .insertOne({
-      applicant: ObjectID.createFromHexString(applicant),
-      item: ObjectID.createFromHexString(item),
-      dateRequested: new Date(Date.now()),
-      __type: 'Request'
+    .collection('applicants')
+    .findOne({
+      registrationNumber: applicant
     })
     .then(async result => {
+      let applicantResult = result;
+      if (!applicantResult) {
+        const applicantWriteResult = await context.db
+          .collection('applicants')
+          .insertOne({
+            registrationNumber: applicant,
+            __type: 'Applicant'
+          });
+        applicantResult = applicantWriteResult.ops[0];
+      }
+      return applicantResult;
+    })
+    .then(async applicantResult => {
+      const requestWriteResult = await context.db
+        .collection('requests')
+        .insertOne({
+          applicant: applicantResult._id,
+          item: ObjectID.createFromHexString(parsedItemId),
+          dateRequested: new Date(Date.now()),
+          delivered: false,
+          quantity,
+          __type: 'Request'
+        });
+      return { requestResult: requestWriteResult.ops[0], applicantResult };
+    })
+    .then(async ({ requestResult, applicantResult }) => {
       await context.db.collection('items').updateOne(
         {
-          _id: ObjectID.createFromHexString(item)
+          _id: ObjectID.createFromHexString(parsedItemId)
         },
         {
-          $push: { requests: result.ops[0]._id }
+          $push: { requests: requestResult._id },
+          $inc: { quantity: -quantity }
         }
       );
       await context.db.collection('applicants').updateOne(
         {
-          _id: ObjectID.createFromHexString(applicant)
+          _id: applicantResult._id
         },
         {
-          $push: { requests: result.ops[0]._id }
+          $push: { requests: requestResult._id }
         }
       );
-      return { request: result.ops[0], clientMutationId };
+      return { request: requestResult, clientMutationId };
     });
 }
 

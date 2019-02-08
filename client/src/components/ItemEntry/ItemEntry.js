@@ -10,7 +10,7 @@ import environment from '../../Environment';
 import Icon from '../Icon';
 import ChevronRight from '../icons/ChevronRight';
 
-function ItemEntry({ item, onDelete }) {
+function ItemEntry({ item }) {
   function handleModifyQuantity(quantity) {
     UpdateItem(environment, {
       id: item.id,
@@ -47,34 +47,12 @@ function ItemEntry({ item, onDelete }) {
           className="ItemListItemGoToDetails"
         />
       </div>
-      <div>
-        <Button
-          variant="contained"
-          style={{
-            marginRight: 12
-          }}
-        >
-          Pedir
-        </Button>
-        <Button
-          variant="contained"
-          style={{
-            marginRight: 12
-          }}
-        >
-          Regresar
-        </Button>
-        <Button variant="contained" onClick={() => onDelete(item)}>
-          Eliminar
-        </Button>
-      </div>
     </li>
   );
 }
 
 ItemEntry.propTypes = {
-  item: PropTypes.object.isRequired,
-  onDelete: PropTypes.func.isRequired
+  item: PropTypes.object.isRequired
 };
 
 export default createFragmentContainer(

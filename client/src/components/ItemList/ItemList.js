@@ -5,7 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import ItemEntry from '../ItemEntry';
 import './ItemList.css';
 
-function ItemList({ listItems, onDelete }) {
+function ItemList({ listItems }) {
   if (!listItems.length) {
     return (
       <p
@@ -21,15 +21,14 @@ function ItemList({ listItems, onDelete }) {
   return (
     <ul className="ItemListContainer">
       {listItems.map(el => (
-        <ItemEntry key={el.__id} item={el} onDelete={onDelete} />
+        <ItemEntry key={el.__id} item={el} />
       ))}
     </ul>
   );
 }
 
 ItemList.propTypes = {
-  listItems: PropTypes.array.isRequired,
-  onDelete: PropTypes.func.isRequired
+  listItems: PropTypes.array.isRequired
 };
 
 export default createFragmentContainer(

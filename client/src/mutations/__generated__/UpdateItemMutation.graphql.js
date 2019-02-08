@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e3c6655d13ccfa7b7510819925ded9fb
+ * @relayHash 93e36053a235d446b15dacfb256628a9
  */
 
 /* eslint-disable */
@@ -21,6 +21,7 @@ export type UpdateItemMutationResponse = {|
   +updateItem: {|
     +item: ?{|
       +id: string,
+      +name: string,
       +quantity: number,
     |}
   |}
@@ -38,6 +39,7 @@ mutation UpdateItemMutation(
   updateItem(input: $input) {
     item {
       id
+      name
       quantity
     }
   }
@@ -89,6 +91,13 @@ const node /*: ConcreteRequest*/ = (function() {
               {
                 kind: 'ScalarField',
                 alias: null,
+                name: 'name',
+                args: null,
+                storageKey: null
+              },
+              {
+                kind: 'ScalarField',
+                alias: null,
                 name: 'quantity',
                 args: null,
                 storageKey: null
@@ -119,11 +128,11 @@ const node /*: ConcreteRequest*/ = (function() {
       name: 'UpdateItemMutation',
       id: null,
       text:
-        'mutation UpdateItemMutation(\n  $input: UpdateItemInput!\n) {\n  updateItem(input: $input) {\n    item {\n      id\n      quantity\n    }\n  }\n}\n',
+        'mutation UpdateItemMutation(\n  $input: UpdateItemInput!\n) {\n  updateItem(input: $input) {\n    item {\n      id\n      name\n      quantity\n    }\n  }\n}\n',
       metadata: {}
     }
   };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '0a2afa6f258b9510c3feaf0c1e1e0f13';
+(node/*: any*/).hash = '4e156491e6ad28823bbbb000a634eed3';
 module.exports = node;

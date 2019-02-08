@@ -6,8 +6,8 @@ interface Node {
 
 type Query {
   listItems: [Item!]!
-  listApplicants(filter: ApplicantFilterInput): [Applicant!]!
   node(id: ID!): Node
+  getItem(id: ID!): Item
 }
 
 type Mutation {
@@ -54,7 +54,9 @@ input CreateApplicantInput {
 input CreateRequestInput {
   clientMutationId: String
   item: ID!
-  applicant: ID!
+  "The applicant registration number"
+  applicant: String!
+  quantity: Int!
 }
 
 input DeleteItemInput {
@@ -85,7 +87,8 @@ type Request implements Node {
   item: Item!
   dateRequested: Date!
   delivered: Boolean!
-  dateDelivered: Boolean!
+  dateDelivered: Date
+  quantity: Int!
 }
 
 type RequestPayload {

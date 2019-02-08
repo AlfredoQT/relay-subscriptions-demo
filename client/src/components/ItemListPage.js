@@ -8,8 +8,6 @@ import Button from '@material-ui/core/Button';
 import NewItemDialog from './NewItemDialog';
 import Spinner from './Spinner';
 import CreateItem from '../mutations/CreateItem';
-import DeleteItem from '../mutations/DeleteItem';
-import DeleteItemDialog from './DeleteItemDialog';
 
 const ItemListPageQuery = graphql`
   query ItemListPageQuery {
@@ -20,34 +18,19 @@ const ItemListPageQuery = graphql`
 `;
 
 function ItemListPage() {
-  const [openAdd, setOpenAdd] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  function handleOpen(operation) {
-    if (operation === 'add') {
-      setOpenAdd(true);
-    } else if (operation === 'delete') {
-      setOpenDelete(true);
-    }
+  function handleOpen() {
+    setOpen(true);
   }
 
-  function handleClose(operation) {
-    if (operation === 'add') {
-      setOpenAdd(false);
-    } else if (operation === 'delete') {
-      setOpenDelete(false);
-    }
+  function handleClose() {
+    setOpen(true);
   }
 
-  function handleOperation(operation, input) {
-    if (operation === 'add') {
-      CreateItem(environment, input);
-      setOpenAdd(false);
-    } else if (operation === 'delete') {
-      DeleteItem(environment, input);
-      setOpenDelete(false);
-    }
+  function handleAdd(input) {
+    CreateItem(environment, input);
+    setOpen(false);
   }
 
   return (
@@ -83,21 +66,11 @@ function ItemListPage() {
               <ItemList
                 /* eslint-disable-next-line react/prop-types */
                 listItems={props.listItems}
-                onDelete={item => {
-                  setSelectedItem(item);
-                  handleOpen('delete');
-                }}
               />
               <NewItemDialog
-                open={openAdd}
+                open={open}
                 onClose={() => handleClose('add')}
-                onAdd={input => handleOperation('add', input)}
-              />
-              <DeleteItemDialog
-                item={selectedItem}
-                open={openDelete && selectedItem !== null}
-                onClose={() => handleClose('delete')}
-                onDelete={input => handleOperation('delete', input)}
+                onAdd={handleAdd}
               />
             </section>
           );
