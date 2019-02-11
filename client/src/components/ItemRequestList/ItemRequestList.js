@@ -13,7 +13,7 @@ export default createFragmentContainer(
   ItemRequestList,
   graphql`
     fragment ItemRequestList_listRequests on Request @relay(plural: true) {
-      
+      ...ItemRequestEntry_request
     }
   `
 );

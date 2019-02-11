@@ -11,7 +11,7 @@ ItemRequestEntry.propTypes = {
 export default createFragmentContainer(
   ItemRequestEntry,
   graphql`
-    fragment ItemRequestEntry_request on Item {
+    fragment ItemRequestEntry_request on Request {
       id
       applicant {
         registrationNumber

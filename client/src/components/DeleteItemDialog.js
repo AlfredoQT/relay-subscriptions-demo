@@ -13,10 +13,10 @@ function Transition(props) {
   return <Slide direction="right" {...props} />;
 }
 
-function DeleteItemDialog({ open, onClose, onDelete, item }) {
+function DeleteItemDialog({ open, onClose, onDelete, itemID }) {
   function handleDelete() {
     onDelete({
-      id: item.id
+      id: itemID
     });
   }
 
@@ -29,9 +29,7 @@ function DeleteItemDialog({ open, onClose, onDelete, item }) {
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle id="alert-dialog-slide-title">
-        Eliminar {!!item && item.name}?
-      </DialogTitle>
+      <DialogTitle id="alert-dialog-slide-title">Eliminar?</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           Al eliminar este item, se perderá la historia sobre sus pedidos.
@@ -53,11 +51,7 @@ DeleteItemDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  item: PropTypes.object
-};
-
-DeleteItemDialog.defaultProps = {
-  item: null
+  itemID: PropTypes.string.isRequired
 };
 
 export default DeleteItemDialog;

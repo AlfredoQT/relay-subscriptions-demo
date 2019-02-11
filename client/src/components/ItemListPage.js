@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { QueryRenderer, graphql } from 'react-relay';
 
 import environment from '../Environment';
@@ -17,7 +18,7 @@ const ItemListPageQuery = graphql`
   }
 `;
 
-function ItemListPage() {
+function ItemListPage({ onItemClick }) {
   const [open, setOpen] = useState(false);
 
   function handleOpen() {
@@ -25,7 +26,7 @@ function ItemListPage() {
   }
 
   function handleClose() {
-    setOpen(true);
+    setOpen(false);
   }
 
   function handleAdd(input) {
@@ -42,7 +43,7 @@ function ItemListPage() {
           return <div>{error.message}</div>;
         } else if (props) {
           return (
-            <section>
+            <main>
               <h1
                 style={{
                   fontSize: '2.5rem',
@@ -59,20 +60,21 @@ function ItemListPage() {
                 style={{
                   marginBottom: '24px'
                 }}
-                onClick={() => handleOpen('add')}
+                onClick={handleOpen}
               >
                 Añadir
               </Button>
               <ItemList
                 /* eslint-disable-next-line react/prop-types */
                 listItems={props.listItems}
+                onItemClick={onItemClick}
               />
               <NewItemDialog
                 open={open}
-                onClose={() => handleClose('add')}
+                onClose={handleClose}
                 onAdd={handleAdd}
               />
-            </section>
+            </main>
           );
         }
         return <Spinner size="large" />;
@@ -80,5 +82,9 @@ function ItemListPage() {
     />
   );
 }
+
+ItemListPage.propTypes = {
+  onItemClick: PropTypes.func.isRequired
+};
 
 export default ItemListPage;
