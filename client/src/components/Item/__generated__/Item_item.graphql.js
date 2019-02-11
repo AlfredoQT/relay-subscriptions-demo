@@ -13,6 +13,7 @@ declare export opaque type Item_item$ref: FragmentReference;
 export type Item_item = {|
   +id: string,
   +name: string,
+  +quantity: number,
   +$refType: Item_item$ref,
 |};
 */
@@ -37,9 +38,16 @@ const node /*: ReaderFragment*/ = {
       name: 'name',
       args: null,
       storageKey: null
+    },
+    {
+      kind: 'ScalarField',
+      alias: null,
+      name: 'quantity',
+      args: null,
+      storageKey: null
     }
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = 'ec7b4a9336f468e2ae4847cca99753b3';
+(node/*: any*/).hash = '18f76501b23c9532ba360ea9e08ad72a';
 module.exports = node;

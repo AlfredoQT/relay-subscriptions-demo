@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 0531840ecd77f1c0212227432bf1670f
+ * @relayHash 614210ab4ed59f0d186212d3a6270e3f
  */
 
 /* eslint-disable */
@@ -37,6 +37,7 @@ query ItemPageQuery(
 fragment Item_item on Item {
   id
   name
+  quantity
 }
 */
 
@@ -111,6 +112,13 @@ const node /*: ConcreteRequest*/ = (function() {
               name: 'name',
               args: null,
               storageKey: null
+            },
+            {
+              kind: 'ScalarField',
+              alias: null,
+              name: 'quantity',
+              args: null,
+              storageKey: null
             }
           ]
         }
@@ -121,7 +129,7 @@ const node /*: ConcreteRequest*/ = (function() {
       name: 'ItemPageQuery',
       id: null,
       text:
-        'query ItemPageQuery(\n  $itemID: ID!\n) {\n  getItem(id: $itemID) {\n    ...Item_item\n    id\n  }\n}\n\nfragment Item_item on Item {\n  id\n  name\n}\n',
+        'query ItemPageQuery(\n  $itemID: ID!\n) {\n  getItem(id: $itemID) {\n    ...Item_item\n    id\n  }\n}\n\nfragment Item_item on Item {\n  id\n  name\n  quantity\n}\n',
       metadata: {}
     }
   };
