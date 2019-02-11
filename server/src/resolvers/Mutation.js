@@ -36,6 +36,31 @@ function updateItem(parent, args, context, info) {
     }));
 }
 
+function updateRequest(parent, args, context, info) {
+  const update = buildObjectFromQuery(args.input, [
+    'dateRequested',
+    'delivered',
+    'dateDelivered',
+    'quantity'
+  ]);
+  const { id } = fromGlobalId(args.input.id);
+  return context.db
+    .collection('requests')
+    .findOneAndUpdate(
+      {
+        _id: ObjectID.createFromHexString(id)
+      },
+      { $set: update },
+      {
+        returnOriginal: false
+      }
+    )
+    .then(response => ({
+      request: response.value,
+      clientMutationId: args.input.clientMutationId
+    }));
+}
+
 function deleteItem(parent, args, context, info) {
   const { id } = fromGlobalId(args.input.id);
   return context.db
@@ -129,5 +154,6 @@ export default {
   updateItem,
   createApplicant,
   createRequest,
-  deleteItem
+  deleteItem,
+  updateRequest
 };
