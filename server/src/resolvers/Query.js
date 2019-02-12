@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb';
 
 import { fromGlobalId } from '../utils/globalId';
 
-function listItems(parent, args, context, info) {
+function items(parent, args, context, info) {
   return context.db
     .collection('items')
     .find({})
@@ -19,7 +19,7 @@ function node(parent, args, context, info) {
     });
 }
 
-function getItem(parent, args, context, info) {
+function item(parent, args, context, info) {
   // Extract the type and id
   const { type, id } = fromGlobalId(args.id);
   return context.db.collection('items').findOne({
@@ -28,7 +28,7 @@ function getItem(parent, args, context, info) {
 }
 
 export default {
-  listItems,
+  items,
   node,
-  getItem
+  item
 };

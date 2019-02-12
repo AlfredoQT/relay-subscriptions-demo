@@ -133,8 +133,7 @@ function createRequest(parent, args, context, info) {
           _id: ObjectID.createFromHexString(parsedItemId)
         },
         {
-          $push: { requests: requestResult._id },
-          $inc: { quantity: -quantity }
+          $push: { requests: requestResult._id }
         }
       );
       await context.db.collection('applicants').updateOne(

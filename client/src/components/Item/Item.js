@@ -8,11 +8,19 @@ import EditIcon from '@material-ui/icons/Edit';
 import './Item.css';
 import UpdateItem from '../../mutations/UpdateItem';
 import environment from '../../Environment';
+import ItemRequestList from '../ItemRequestList/ItemRequestList';
+import CreateRequest from '../../mutations/CreateRequest';
 
 function Item({ item, onDelete }) {
+  let textInput = null;
   const [nameInput, setNameInput] = useState(item.name);
   const [nameDisabled, setNameDisabled] = useState(true);
-  let textInput = null;
+  useEffect(
+    () => {
+      textInput.focus();
+    },
+    [nameDisabled]
+  );
 
   function setTextInput(element) {
     textInput = element;
@@ -34,13 +42,6 @@ function Item({ item, onDelete }) {
     setNameDisabled(true);
   }
 
-  useEffect(
-    () => {
-      textInput.focus();
-    },
-    [nameDisabled]
-  );
-
   function handleModifyQuantity(quantity) {
     UpdateItem(environment, {
       id: item.id,
@@ -48,8 +49,28 @@ function Item({ item, onDelete }) {
     });
   }
 
+  function handleAddRequest(input) {
+    UpdateItem(environment, {
+      id: item.id,
+      quantity: item.quantity - input.quantity
+    });
+    CreateRequest(environment, {
+      ...input,
+      item: item.id
+    });
+  }
+
   return (
     <>
+      <h2
+        style={{
+          fontSize: '1.5rem',
+          fontWeight: 'bold',
+          marginBottom: '24px'
+        }}
+      >
+        Información
+      </h2>
       <div className="ItemDetailsContainer">
         <div className="ItemUpdateNameContainer">
           <input
@@ -95,6 +116,10 @@ function Item({ item, onDelete }) {
           +
         </Button>
       </div>
+      <ItemRequestList
+        requests={item.requests}
+        onAddRequest={handleAddRequest}
+      />
     </>
   );
 }
@@ -111,9 +136,9 @@ export default createFragmentContainer(
       id
       name
       quantity
-      # requests {
-      #   ...ItemRequestList_listRequests
-      # }
+      requests {
+        ...ItemRequestList_requests
+      }
     }
   `
 );

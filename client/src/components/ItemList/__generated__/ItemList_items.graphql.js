@@ -10,16 +10,16 @@
 import type { ReaderFragment } from 'relay-runtime';
 type ItemEntry_item$ref = any;
 import type { FragmentReference } from "relay-runtime";
-declare export opaque type ItemList_listItems$ref: FragmentReference;
-export type ItemList_listItems = $ReadOnlyArray<{|
+declare export opaque type ItemList_items$ref: FragmentReference;
+export type ItemList_items = $ReadOnlyArray<{|
   +$fragmentRefs: ItemEntry_item$ref,
-  +$refType: ItemList_listItems$ref,
+  +$refType: ItemList_items$ref,
 |}>;
 */
 
 const node /*: ReaderFragment*/ = {
   kind: 'Fragment',
-  name: 'ItemList_listItems',
+  name: 'ItemList_items',
   type: 'Item',
   metadata: {
     plural: true
@@ -34,5 +34,5 @@ const node /*: ReaderFragment*/ = {
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = 'a51e679703334bcc51417025560a28cf';
+(node/*: any*/).hash = '21f5ccc2d0c4a4e2426210d64595723d';
 module.exports = node;

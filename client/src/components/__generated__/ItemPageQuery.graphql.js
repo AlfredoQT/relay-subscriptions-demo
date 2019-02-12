@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 614210ab4ed59f0d186212d3a6270e3f
+ * @relayHash 948243b77507d29e29ec499c0bc74c84
  */
 
 /* eslint-disable */
@@ -14,7 +14,7 @@ export type ItemPageQueryVariables = {|
   itemID: string
 |};
 export type ItemPageQueryResponse = {|
-  +getItem: ?{|
+  +item: ?{|
     +$fragmentRefs: Item_item$ref
   |}
 |};
@@ -28,7 +28,7 @@ export type ItemPageQuery = {|
 query ItemPageQuery(
   $itemID: ID!
 ) {
-  getItem(id: $itemID) {
+  item(id: $itemID) {
     ...Item_item
     id
   }
@@ -38,6 +38,25 @@ fragment Item_item on Item {
   id
   name
   quantity
+  requests {
+    ...ItemRequestList_requests
+    id
+  }
+}
+
+fragment ItemRequestList_requests on Request {
+  ...ItemRequestEntry_request
+}
+
+fragment ItemRequestEntry_request on Request {
+  id
+  applicant {
+    registrationNumber
+    id
+  }
+  dateRequested
+  dateDelivered
+  delivered
 }
 */
 
@@ -57,7 +76,14 @@ const node /*: ConcreteRequest*/ = (function() {
         variableName: 'itemID',
         type: 'ID!'
       }
-    ];
+    ],
+    v2 = {
+      kind: 'ScalarField',
+      alias: null,
+      name: 'id',
+      args: null,
+      storageKey: null
+    };
   return {
     kind: 'Request',
     fragment: {
@@ -70,7 +96,7 @@ const node /*: ConcreteRequest*/ = (function() {
         {
           kind: 'LinkedField',
           alias: null,
-          name: 'getItem',
+          name: 'item',
           storageKey: null,
           args: (v1 /*: any*/),
           concreteType: 'Item',
@@ -93,19 +119,13 @@ const node /*: ConcreteRequest*/ = (function() {
         {
           kind: 'LinkedField',
           alias: null,
-          name: 'getItem',
+          name: 'item',
           storageKey: null,
           args: (v1 /*: any*/),
           concreteType: 'Item',
           plural: false,
           selections: [
-            {
-              kind: 'ScalarField',
-              alias: null,
-              name: 'id',
-              args: null,
-              storageKey: null
-            },
+            (v2 /*: any*/),
             {
               kind: 'ScalarField',
               alias: null,
@@ -119,6 +139,58 @@ const node /*: ConcreteRequest*/ = (function() {
               name: 'quantity',
               args: null,
               storageKey: null
+            },
+            {
+              kind: 'LinkedField',
+              alias: null,
+              name: 'requests',
+              storageKey: null,
+              args: null,
+              concreteType: 'Request',
+              plural: true,
+              selections: [
+                (v2 /*: any*/),
+                {
+                  kind: 'LinkedField',
+                  alias: null,
+                  name: 'applicant',
+                  storageKey: null,
+                  args: null,
+                  concreteType: 'Applicant',
+                  plural: false,
+                  selections: [
+                    {
+                      kind: 'ScalarField',
+                      alias: null,
+                      name: 'registrationNumber',
+                      args: null,
+                      storageKey: null
+                    },
+                    (v2 /*: any*/)
+                  ]
+                },
+                {
+                  kind: 'ScalarField',
+                  alias: null,
+                  name: 'dateRequested',
+                  args: null,
+                  storageKey: null
+                },
+                {
+                  kind: 'ScalarField',
+                  alias: null,
+                  name: 'dateDelivered',
+                  args: null,
+                  storageKey: null
+                },
+                {
+                  kind: 'ScalarField',
+                  alias: null,
+                  name: 'delivered',
+                  args: null,
+                  storageKey: null
+                }
+              ]
             }
           ]
         }
@@ -129,11 +201,11 @@ const node /*: ConcreteRequest*/ = (function() {
       name: 'ItemPageQuery',
       id: null,
       text:
-        'query ItemPageQuery(\n  $itemID: ID!\n) {\n  getItem(id: $itemID) {\n    ...Item_item\n    id\n  }\n}\n\nfragment Item_item on Item {\n  id\n  name\n  quantity\n}\n',
+        'query ItemPageQuery(\n  $itemID: ID!\n) {\n  item(id: $itemID) {\n    ...Item_item\n    id\n  }\n}\n\nfragment Item_item on Item {\n  id\n  name\n  quantity\n  requests {\n    ...ItemRequestList_requests\n    id\n  }\n}\n\nfragment ItemRequestList_requests on Request {\n  ...ItemRequestEntry_request\n}\n\nfragment ItemRequestEntry_request on Request {\n  id\n  applicant {\n    registrationNumber\n    id\n  }\n  dateRequested\n  dateDelivered\n  delivered\n}\n',
       metadata: {}
     }
   };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '863dd4972cd29ffe788b12ee46d34051';
+(node/*: any*/).hash = 'ef739c2d0643011649070565a8457e6c';
 module.exports = node;

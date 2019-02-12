@@ -12,7 +12,7 @@ import DeleteItem from '../mutations/DeleteItem';
 
 const ItemPageQuery = graphql`
   query ItemPageQuery($itemID: ID!) {
-    getItem(id: $itemID) {
+    item(id: $itemID) {
       ...Item_item
     }
   }
@@ -60,7 +60,7 @@ function ItemPage({ onBack, id }) {
                 />
               </div>
               {/* eslint-disable-next-line react/prop-types */}
-              <Item item={props.getItem} onDelete={handleDeleteRequest} />
+              <Item item={props.item} onDelete={handleDeleteRequest} />
               <DeleteItemDialog
                 open={deleteRequested}
                 itemID={id}

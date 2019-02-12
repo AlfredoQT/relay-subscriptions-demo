@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 4a4c6dab76a5c704cf4192dff2344a34
+ * @relayHash ddbcc83e1d9dd4f967b1f470e4f0f7fe
  */
 
 /* eslint-disable */
@@ -9,11 +9,11 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type ItemList_listItems$ref = any;
+type ItemList_items$ref = any;
 export type ItemListPageQueryVariables = {||};
 export type ItemListPageQueryResponse = {|
-  +listItems: $ReadOnlyArray<{|
-    +$fragmentRefs: ItemList_listItems$ref
+  +items: $ReadOnlyArray<{|
+    +$fragmentRefs: ItemList_items$ref
   |}>
 |};
 export type ItemListPageQuery = {|
@@ -24,13 +24,13 @@ export type ItemListPageQuery = {|
 
 /*
 query ItemListPageQuery {
-  listItems {
-    ...ItemList_listItems
+  items {
+    ...ItemList_items
     id
   }
 }
 
-fragment ItemList_listItems on Item {
+fragment ItemList_items on Item {
   ...ItemEntry_item
 }
 
@@ -53,7 +53,7 @@ const node /*: ConcreteRequest*/ = {
       {
         kind: 'LinkedField',
         alias: null,
-        name: 'listItems',
+        name: 'items',
         storageKey: null,
         args: null,
         concreteType: 'Item',
@@ -61,7 +61,7 @@ const node /*: ConcreteRequest*/ = {
         selections: [
           {
             kind: 'FragmentSpread',
-            name: 'ItemList_listItems',
+            name: 'ItemList_items',
             args: null
           }
         ]
@@ -76,7 +76,7 @@ const node /*: ConcreteRequest*/ = {
       {
         kind: 'LinkedField',
         alias: null,
-        name: 'listItems',
+        name: 'items',
         storageKey: null,
         args: null,
         concreteType: 'Item',
@@ -112,10 +112,10 @@ const node /*: ConcreteRequest*/ = {
     name: 'ItemListPageQuery',
     id: null,
     text:
-      'query ItemListPageQuery {\n  listItems {\n    ...ItemList_listItems\n    id\n  }\n}\n\nfragment ItemList_listItems on Item {\n  ...ItemEntry_item\n}\n\nfragment ItemEntry_item on Item {\n  id\n  name\n  quantity\n}\n',
+      'query ItemListPageQuery {\n  items {\n    ...ItemList_items\n    id\n  }\n}\n\nfragment ItemList_items on Item {\n  ...ItemEntry_item\n}\n\nfragment ItemEntry_item on Item {\n  id\n  name\n  quantity\n}\n',
     metadata: {}
   }
 };
 // prettier-ignore
-(node/*: any*/).hash = '76cd7953eebeabcdf928b6c2b82d5ca2';
+(node/*: any*/).hash = '8529d768cc230e71cb232fe8401a158a';
 module.exports = node;

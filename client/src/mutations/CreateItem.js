@@ -19,8 +19,8 @@ function CreateItem(environment, input) {
     updater: store => {
       const createItem = store.getRootField('createItem');
       const newItem = createItem.getLinkedRecord('item');
-      const prevItems = store.getRoot().getLinkedRecords('listItems');
-      store.getRoot().setLinkedRecords([...prevItems, newItem], 'listItems');
+      const prevItems = store.getRoot().getLinkedRecords('items');
+      store.getRoot().setLinkedRecords([...prevItems, newItem], 'items');
     }
   });
 }

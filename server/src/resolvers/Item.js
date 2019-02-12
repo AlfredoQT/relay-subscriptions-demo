@@ -11,6 +11,7 @@ function requests(parent, args, context, info) {
     .find({
       _id: { $in: parent.requests }
     })
+    .sort({ delivered: 1, dateRequested: -1, dateDelivered: -1 })
     .toArray();
 }
 

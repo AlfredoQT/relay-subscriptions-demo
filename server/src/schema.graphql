@@ -5,9 +5,9 @@ interface Node {
 }
 
 type Query {
-  listItems: [Item!]!
+  items: [Item!]!
   node(id: ID!): Node
-  getItem(id: ID!): Item
+  item(id: ID!): Item
 }
 
 type Mutation {

@@ -5,9 +5,9 @@ interface Node {
 }
 
 type Query {
-  listItems: [Item!]!
+  items: [Item!]!
   node(id: ID!): Node
-  getItem(id: ID!): Item
+  item(id: ID!): Item
 }
 
 type Mutation {
@@ -16,6 +16,7 @@ type Mutation {
   deleteItem(input: DeleteItemInput!): ItemPayload!
   createApplicant(input: CreateApplicantInput!): ApplicantPayload!
   createRequest(input: CreateRequestInput!): RequestPayload!
+  updateRequest(input: UpdateRequestInput!): RequestPayload!
 }
 
 type Subscription {
@@ -43,6 +44,14 @@ input CreateItemInput {
 input UpdateItemInput {
   id: ID!
   name: String
+  quantity: Int
+}
+
+input UpdateRequestInput {
+  id: ID!
+  dateRequested: Date
+  delivered: Boolean
+  dateDelivered: Date
   quantity: Int
 }
 

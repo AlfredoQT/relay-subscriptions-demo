@@ -12,8 +12,8 @@ import CreateItem from '../mutations/CreateItem';
 
 const ItemListPageQuery = graphql`
   query ItemListPageQuery {
-    listItems {
-      ...ItemList_listItems
+    items {
+      ...ItemList_items
     }
   }
 `;
@@ -66,7 +66,7 @@ function ItemListPage({ onItemClick }) {
               </Button>
               <ItemList
                 /* eslint-disable-next-line react/prop-types */
-                listItems={props.listItems}
+                items={props.items}
                 onItemClick={onItemClick}
               />
               <NewItemDialog
