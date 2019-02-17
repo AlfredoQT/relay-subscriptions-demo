@@ -8,20 +8,68 @@ import DialogContent from '@material-ui/core/DialogContent';
 import TextField from '@material-ui/core/TextField';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import ApplicantDetailsInput from './ApplicantDetailsInput';
+import CreateApplicant from '../mutations/CreateApplicant';
+import environment from '../Environment';
 
 function Transition(props) {
   return <Slide direction="right" {...props} />;
 }
 
 function NewRequestDialog({ open, onClose, onAdd }) {
-  const [applicant, setApplicant] = useState('');
+  const [registrationNumber, setRegistrationNumber] = useState('');
+  const [name, setName] = useState(null);
+  const [semester, setSemester] = useState(null);
+  const [applicant, setApplicant] = useState(null);
+  const [showApplicantDetails, setShowApplicantDetails] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
   function handleAdd() {
-    onAdd({
-      applicant,
-      quantity: Number.parseInt(quantity, 10)
-    });
+    if (!name || quantity <= 0 || !registrationNumber || !semester) {
+      return;
+    }
+    let applicantId = applicant;
+    if (applicantId) {
+      onAdd({
+        quantity: Number.parseInt(quantity, 10),
+        applicant: applicantId
+      });
+      reset();
+      return;
+    }
+    CreateApplicant(
+      environment,
+      {
+        name,
+        semester,
+        registrationNumber
+      },
+      response => {
+        onAdd({
+          quantity: Number.parseInt(quantity),
+          applicant: response.createApplicant.applicant.id
+        });
+        reset();
+      }
+    );
+  }
+
+  function handleClose() {
+    reset();
+    onClose();
+  }
+
+  function reset() {
+    setRegistrationNumber('');
+    setQuantity(1);
+    setShowApplicantDetails(false);
+  }
+
+  function handleRegistrationNumberChange(e) {
+    if (showApplicantDetails) {
+      setShowApplicantDetails(false);
+    }
+    setRegistrationNumber(e.target.value);
   }
 
   return (
@@ -29,7 +77,7 @@ function NewRequestDialog({ open, onClose, onAdd }) {
       open={open}
       TransitionComponent={Transition}
       keepMounted
-      onClose={onClose}
+      onClose={handleClose}
       aria-labelledby="alert-dialog-slide-title"
       aria-describedby="alert-dialog-slide-description"
     >
@@ -40,17 +88,28 @@ function NewRequestDialog({ open, onClose, onAdd }) {
         }}
       >
         <TextField
-          id="applicant"
-          label="Aplicante"
+          id="registrationNumber"
+          label="Matrícula"
           type="text"
           fullWidth
           variant="outlined"
           style={{
             marginBottom: '24px'
           }}
-          value={applicant}
-          onChange={e => setApplicant(e.target.value)}
+          value={registrationNumber}
+          onChange={handleRegistrationNumberChange}
+          inputProps={{
+            onBlur: () => setShowApplicantDetails(true)
+          }}
         />
+        {showApplicantDetails ? (
+          <ApplicantDetailsInput
+            registrationNumber={registrationNumber}
+            onChangeApplicant={setApplicant}
+            onChangeName={setName}
+            onChangeSemester={setSemester}
+          />
+        ) : null}
         <TextField
           id="quantity"
           label="Cantidad del pedido"
@@ -66,7 +125,7 @@ function NewRequestDialog({ open, onClose, onAdd }) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={handleClose} color="primary">
           Cancelar
         </Button>
         <Button onClick={handleAdd} color="primary">

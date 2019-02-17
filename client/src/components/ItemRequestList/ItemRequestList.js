@@ -5,7 +5,7 @@ import { createFragmentContainer, graphql } from 'react-relay';
 import Button from '@material-ui/core/Button';
 import NewRequestDialog from '../NewRequestDialog';
 
-function ItemRequestList({ onAddRequest }) {
+function ItemRequestList({ requests, onAddRequest }) {
   const [open, setOpen] = useState(false);
 
   function handleOpen() {
@@ -42,6 +42,18 @@ function ItemRequestList({ onAddRequest }) {
         Nuevo Pedido
       </Button>
       <NewRequestDialog onAdd={handleAdd} open={open} onClose={handleClose} />
+      {requests.length === 0 ? (
+        <p
+          style={{
+            fontSize: '1rem',
+            fontWeight: 'bold'
+          }}
+        >
+          No hay pedidos
+        </p>
+      ) : (
+        <ul />
+      )}
     </div>
   );
 }

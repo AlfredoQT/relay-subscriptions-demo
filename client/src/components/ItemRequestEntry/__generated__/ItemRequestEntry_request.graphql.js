@@ -22,58 +22,59 @@ export type ItemRequestEntry_request = {|
 |};
 */
 
-const node /*: ReaderFragment*/ = {
-  kind: 'Fragment',
-  name: 'ItemRequestEntry_request',
-  type: 'Request',
-  metadata: null,
-  argumentDefinitions: [],
-  selections: [
+
+const node/*: ReaderFragment*/ = {
+  "kind": "Fragment",
+  "name": "ItemRequestEntry_request",
+  "type": "Request",
+  "metadata": null,
+  "argumentDefinitions": [],
+  "selections": [
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'id',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "id",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'LinkedField',
-      alias: null,
-      name: 'applicant',
-      storageKey: null,
-      args: null,
-      concreteType: 'Applicant',
-      plural: false,
-      selections: [
+      "kind": "LinkedField",
+      "alias": null,
+      "name": "applicant",
+      "storageKey": null,
+      "args": null,
+      "concreteType": "Applicant",
+      "plural": false,
+      "selections": [
         {
-          kind: 'ScalarField',
-          alias: null,
-          name: 'registrationNumber',
-          args: null,
-          storageKey: null
+          "kind": "ScalarField",
+          "alias": null,
+          "name": "registrationNumber",
+          "args": null,
+          "storageKey": null
         }
       ]
     },
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'dateRequested',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "dateRequested",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'dateDelivered',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "dateDelivered",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'delivered',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "delivered",
+      "args": null,
+      "storageKey": null
     }
   ]
 };

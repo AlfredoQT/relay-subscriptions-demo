@@ -18,33 +18,34 @@ export type ItemEntry_item = {|
 |};
 */
 
-const node /*: ReaderFragment*/ = {
-  kind: 'Fragment',
-  name: 'ItemEntry_item',
-  type: 'Item',
-  metadata: null,
-  argumentDefinitions: [],
-  selections: [
+
+const node/*: ReaderFragment*/ = {
+  "kind": "Fragment",
+  "name": "ItemEntry_item",
+  "type": "Item",
+  "metadata": null,
+  "argumentDefinitions": [],
+  "selections": [
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'id',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "id",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'name',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "name",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'quantity',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "quantity",
+      "args": null,
+      "storageKey": null
     }
   ]
 };

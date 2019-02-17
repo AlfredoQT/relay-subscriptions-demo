@@ -81,12 +81,14 @@ function deleteItem(parent, args, context, info) {
 }
 
 function createApplicant(parent, args, context, info) {
-  const { registrationNumber, clientMutationId } = args.input;
+  const { registrationNumber, clientMutationId, name, semester } = args.input;
   return context.db
     .collection('applicants')
     .insertOne({
       registrationNumber: registrationNumber.toUpperCase(),
       requests: [],
+      name,
+      semester,
       __type: 'Applicant'
     })
     .then(result => ({ applicant: result.ops[0], clientMutationId }));
@@ -95,56 +97,37 @@ function createApplicant(parent, args, context, info) {
 function createRequest(parent, args, context, info) {
   const { applicant, item, clientMutationId, quantity } = args.input;
   const { id: parsedItemId } = fromGlobalId(item);
+  const { id: parsedApplicantId } = fromGlobalId(applicant);
 
   return context.db
-    .collection('applicants')
-    .findOne({
-      registrationNumber: applicant
+    .collection('requests')
+    .insertOne({
+      applicant: ObjectID.createFromHexString(parsedApplicantId),
+      item: ObjectID.createFromHexString(parsedItemId),
+      dateRequested: new Date(Date.now()),
+      delivered: false,
+      quantity,
+      __type: 'Request'
     })
-    .then(async result => {
-      let applicantResult = result;
-      if (!applicantResult) {
-        const applicantWriteResult = await context.db
-          .collection('applicants')
-          .insertOne({
-            registrationNumber: applicant,
-            __type: 'Applicant'
-          });
-        applicantResult = applicantWriteResult.ops[0];
-      }
-      return applicantResult;
-    })
-    .then(async applicantResult => {
-      const requestWriteResult = await context.db
-        .collection('requests')
-        .insertOne({
-          applicant: applicantResult._id,
-          item: ObjectID.createFromHexString(parsedItemId),
-          dateRequested: new Date(Date.now()),
-          delivered: false,
-          quantity,
-          __type: 'Request'
-        });
-      return { requestResult: requestWriteResult.ops[0], applicantResult };
-    })
-    .then(async ({ requestResult, applicantResult }) => {
+    .then(result => result.ops[0])
+    .then(async request => {
       await context.db.collection('items').updateOne(
         {
           _id: ObjectID.createFromHexString(parsedItemId)
         },
         {
-          $push: { requests: requestResult._id }
+          $push: { requests: request._id }
         }
       );
       await context.db.collection('applicants').updateOne(
         {
-          _id: applicantResult._id
+          _id: ObjectID.createFromHexString(parsedApplicantId)
         },
         {
-          $push: { requests: requestResult._id }
+          $push: { requests: request._id }
         }
       );
-      return { request: requestResult, clientMutationId };
+      return request;
     });
 }
 

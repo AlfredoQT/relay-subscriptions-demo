@@ -17,19 +17,20 @@ export type ItemList_items = $ReadOnlyArray<{|
 |}>;
 */
 
-const node /*: ReaderFragment*/ = {
-  kind: 'Fragment',
-  name: 'ItemList_items',
-  type: 'Item',
-  metadata: {
-    plural: true
+
+const node/*: ReaderFragment*/ = {
+  "kind": "Fragment",
+  "name": "ItemList_items",
+  "type": "Item",
+  "metadata": {
+    "plural": true
   },
-  argumentDefinitions: [],
-  selections: [
+  "argumentDefinitions": [],
+  "selections": [
     {
-      kind: 'FragmentSpread',
-      name: 'ItemEntry_item',
-      args: null
+      "kind": "FragmentSpread",
+      "name": "ItemEntry_item",
+      "args": null
     }
   ]
 };

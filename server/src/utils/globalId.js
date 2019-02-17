@@ -2,15 +2,21 @@
 import { base64, unbase64 } from './base64';
 
 type ResolvedGlobalId = {
-  type: string,
-  id: string
+  type?: string,
+  id?: string
 };
 
 export function toGlobalId(type: string, id: string): string {
   return base64([type, id].join(':'));
 }
 
-export function fromGlobalId(id: string): ResolvedGlobalId {
+export function fromGlobalId(id?: string): ResolvedGlobalId {
+  if (id === undefined) {
+    return {
+      id: undefined,
+      type: undefined
+    };
+  }
   const unbased = unbase64(id);
 
   const delimiterPos = unbased.indexOf(':');

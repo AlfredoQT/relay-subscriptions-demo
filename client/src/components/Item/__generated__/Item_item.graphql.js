@@ -22,47 +22,48 @@ export type Item_item = {|
 |};
 */
 
-const node /*: ReaderFragment*/ = {
-  kind: 'Fragment',
-  name: 'Item_item',
-  type: 'Item',
-  metadata: null,
-  argumentDefinitions: [],
-  selections: [
+
+const node/*: ReaderFragment*/ = {
+  "kind": "Fragment",
+  "name": "Item_item",
+  "type": "Item",
+  "metadata": null,
+  "argumentDefinitions": [],
+  "selections": [
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'id',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "id",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'name',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "name",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'ScalarField',
-      alias: null,
-      name: 'quantity',
-      args: null,
-      storageKey: null
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "quantity",
+      "args": null,
+      "storageKey": null
     },
     {
-      kind: 'LinkedField',
-      alias: null,
-      name: 'requests',
-      storageKey: null,
-      args: null,
-      concreteType: 'Request',
-      plural: true,
-      selections: [
+      "kind": "LinkedField",
+      "alias": null,
+      "name": "requests",
+      "storageKey": null,
+      "args": null,
+      "concreteType": "Request",
+      "plural": true,
+      "selections": [
         {
-          kind: 'FragmentSpread',
-          name: 'ItemRequestList_requests',
-          args: null
+          "kind": "FragmentSpread",
+          "name": "ItemRequestList_requests",
+          "args": null
         }
       ]
     }

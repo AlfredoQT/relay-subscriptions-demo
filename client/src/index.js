@@ -11,10 +11,11 @@ if (process.env.NODE_ENV === 'development') {
   axe(React, ReactDOM, 1000);
 }
 
-ReactDOM.createRoot(document.getElementById('app')).render(
+ReactDOM.render(
   <React.StrictMode>
     <DefaultErrorBoundary>
       <App />
     </DefaultErrorBoundary>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('app')
 );

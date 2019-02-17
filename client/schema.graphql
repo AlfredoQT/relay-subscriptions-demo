@@ -8,6 +8,7 @@ type Query {
   items: [Item!]!
   node(id: ID!): Node
   item(id: ID!): Item
+  applicant(input: ApplicantWhereUniqueInput!): Applicant
 }
 
 type Mutation {
@@ -17,6 +18,11 @@ type Mutation {
   createApplicant(input: CreateApplicantInput!): ApplicantPayload!
   createRequest(input: CreateRequestInput!): RequestPayload!
   updateRequest(input: UpdateRequestInput!): RequestPayload!
+}
+
+input ApplicantWhereUniqueInput {
+  id: ID
+  registrationNumber: String
 }
 
 type Subscription {
@@ -58,13 +64,14 @@ input UpdateRequestInput {
 input CreateApplicantInput {
   clientMutationId: String
   registrationNumber: String!
+  semester: String!
+  name: String!
 }
 
 input CreateRequestInput {
   clientMutationId: String
   item: ID!
-  "The applicant registration number"
-  applicant: String!
+  applicant: ID!
   quantity: Int!
 }
 
@@ -83,6 +90,8 @@ type Applicant implements Node {
   id: ID!
   registrationNumber: String!
   requests: [Request!]!
+  semester: String!
+  name: String!
 }
 
 type ApplicantPayload {
@@ -103,8 +112,4 @@ type Request implements Node {
 type RequestPayload {
   clientMutationId: String
   request: Request
-}
-
-input ApplicantFilterInput {
-  registrationNumber: String
 }

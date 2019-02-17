@@ -9,6 +9,33 @@ function items(parent, args, context, info) {
     .toArray();
 }
 
+function applicant(parent, args, context, info) {
+  const registrationNumber = args.input.registrationNumber;
+  const { id } = fromGlobalId(args.input.id);
+
+  const orExpression = [];
+
+  // TODO: Refactor this if needed
+  if (registrationNumber !== null) {
+    orExpression.push({ registrationNumber: registrationNumber.toUpperCase() });
+  }
+  if (id !== undefined) {
+    orExpression.push({ id: ObjectID.createFromHexString(id) });
+  }
+
+  if (!orExpression.length) {
+    return null;
+  }
+
+  if (orExpression.length === 1) {
+    return context.db.collection('applicants').findOne(orExpression[0]);
+  }
+
+  return context.db.collection('applicants').findOne({
+    $or: orExpression
+  });
+}
+
 function node(parent, args, context, info) {
   // Extract the type and id
   const { type, id } = fromGlobalId(args.id);
@@ -30,5 +57,6 @@ function item(parent, args, context, info) {
 export default {
   items,
   node,
-  item
+  item,
+  applicant
 };
