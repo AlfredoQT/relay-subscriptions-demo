@@ -127,7 +127,11 @@ function createRequest(parent, args, context, info) {
           $push: { requests: request._id }
         }
       );
-      return request;
+      console.log(request);
+      return {
+        request,
+        clientMutationId
+      };
     });
 }
 

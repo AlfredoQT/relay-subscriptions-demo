@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
-import { Button } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 import UpdateItem from '../../mutations/UpdateItem';
 import './ItemEntry.css';

@@ -4,8 +4,10 @@ import PropTypes from 'prop-types';
 import { createFragmentContainer, graphql } from 'react-relay';
 import Button from '@material-ui/core/Button';
 import NewRequestDialog from '../NewRequestDialog';
+import ItemRequestEntry from '../ItemRequestEntry/ItemRequestEntry';
+import './ItemRequestList.css';
 
-function ItemRequestList({ requests, onAddRequest }) {
+function ItemRequestList({ requests, onAddRequest, onDeliverRequest }) {
   const [open, setOpen] = useState(false);
 
   function handleOpen() {
@@ -52,7 +54,15 @@ function ItemRequestList({ requests, onAddRequest }) {
           No hay pedidos
         </p>
       ) : (
-        <ul />
+        <ul className="ItemRequestListContainer">
+          {requests.map(el => (
+            <ItemRequestEntry
+              request={el}
+              key={el.__id}
+              onDeliver={onDeliverRequest}
+            />
+          ))}
+        </ul>
       )}
     </div>
   );
@@ -60,7 +70,8 @@ function ItemRequestList({ requests, onAddRequest }) {
 
 ItemRequestList.propTypes = {
   requests: PropTypes.array.isRequired,
-  onAddRequest: PropTypes.func.isRequired
+  onAddRequest: PropTypes.func.isRequired,
+  onDeliverRequest: PropTypes.func.isRequired
 };
 
 export default createFragmentContainer(

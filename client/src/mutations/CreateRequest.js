@@ -9,6 +9,10 @@ const mutation = graphql`
         dateRequested
         delivered
         quantity
+        applicant {
+          name
+          registrationNumber
+        }
       }
     }
   }
@@ -17,7 +21,16 @@ const mutation = graphql`
 function CreateRequest(environment, input) {
   commitMutation(environment, {
     variables: { input },
-    mutation: mutation
+    mutation: mutation,
+    updater: store => {
+      const item = store.get(input.item);
+      const createRequest = store.getRootField('createRequest');
+      const request = createRequest.getLinkedRecord('request');
+      item.setLinkedRecords(
+        [request, ...item.getLinkedRecords('requests')],
+        'requests'
+      );
+    }
   });
 }
 

@@ -10,6 +10,7 @@ import UpdateItem from '../../mutations/UpdateItem';
 import environment from '../../Environment';
 import ItemRequestList from '../ItemRequestList/ItemRequestList';
 import CreateRequest from '../../mutations/CreateRequest';
+import UpdateRequest from '../../mutations/UpdateRequest';
 
 function Item({ item, onDelete }) {
   let textInput = null;
@@ -57,6 +58,15 @@ function Item({ item, onDelete }) {
     CreateRequest(environment, {
       ...input,
       item: item.id
+    });
+  }
+
+  function handleDeliverRequest(input) {
+    const { quantity, ...other } = input;
+    UpdateRequest(environment, other);
+    UpdateItem(environment, {
+      id: item.id,
+      quantity: item.quantity + quantity
     });
   }
 
@@ -119,6 +129,7 @@ function Item({ item, onDelete }) {
       <ItemRequestList
         requests={item.requests}
         onAddRequest={handleAddRequest}
+        onDeliverRequest={handleDeliverRequest}
       />
     </>
   );
