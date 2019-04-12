@@ -31,6 +31,8 @@ const styles = theme => ({
   },
   itemsList: {
     listStyleType: 'none',
+    margin: 0,
+    padding: 0,
     '&> li': {
       marginBottom: 16,
     },
