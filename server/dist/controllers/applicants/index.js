@@ -1,5 +1,9 @@
 "use strict";
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -89,7 +93,7 @@ function _post() {
   _post = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee2(req, res) {
-    var _req$body, registrationNumber, name, semester, found, applicant;
+    var _req$body, registrationNumber, name, semester, found, applicant, _id, applicantNoId;
 
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
@@ -119,17 +123,20 @@ function _post() {
             return DatabaseConnector.getInstance().getDatabase().collection('applicants').insertOne({
               name: name,
               registrationNumber: registrationNumber.toUpperCase(),
-              semester: semester
+              semester: Number.parseInt(semester, 10)
             });
 
           case 8:
             applicant = _context2.sent.ops[0];
+            _id = applicant._id, applicantNoId = _objectWithoutProperties(applicant, ["_id"]);
             res.status(201).send({
               status: 'CREATED',
-              applicant: applicant
+              applicant: _objectSpread({}, applicantNoId, {
+                id: _id
+              })
             });
 
-          case 10:
+          case 11:
           case "end":
             return _context2.stop();
         }
@@ -147,7 +154,8 @@ function _put() {
   _put = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee3(req, res) {
-    var body, update, id, applicant;
+    var body, update, id, applicant, _id, applicantNoId;
+
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -173,12 +181,15 @@ function _put() {
 
           case 6:
             applicant = _context3.sent.value;
-            res.status(200).send({
+            _id = applicant._id, applicantNoId = _objectWithoutProperties(applicant, ["_id"]);
+            res.status(201).send({
               status: 'UPDATED',
-              applicant: applicant
+              applicant: _objectSpread({}, applicantNoId, {
+                id: _id
+              })
             });
 
-          case 8:
+          case 9:
           case "end":
             return _context3.stop();
         }

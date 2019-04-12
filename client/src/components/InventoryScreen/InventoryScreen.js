@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import MainDrawer from '../MainDrawer';
 import MainAppBar from '../MainAppBar';
 import { getItems, putItem, updateItem } from '../../api';
-import InventoryListItem from '../InventoryListItem/InventoryListItem';
+import InventoryListItem from '../InventoryListItem';
 import Spinner from '../Spinner';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
@@ -43,6 +43,7 @@ function InventoryScreen({ classes }) {
   const [open, setOpen] = useState(false);
   const [primaryAction, setPrimaryAction] = useState('Añadir');
   const [title, setTitle] = useState('Nuevo item');
+  const [itemId, setItemId] = useState('');
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState(1);
   const [itemModel, setItemModel] = useState('');
@@ -87,7 +88,7 @@ function InventoryScreen({ classes }) {
   }
 
   function handleEditRequest(item) {
-    console.log(item);
+    setItemId(item.id);
     setItemName(item.name);
     setItemQuantity(item.quantity);
     setItemModel(item.model);
@@ -98,6 +99,7 @@ function InventoryScreen({ classes }) {
 
   function handleClose() {
     setOpen(false);
+    setItemId('');
     setItemName('');
     setItemQuantity(1);
     setItemModel('');
@@ -129,6 +131,7 @@ function InventoryScreen({ classes }) {
         onMutate={handleMutation}
         primaryAction={primaryAction}
         title={title}
+        id={itemId}
         name={itemName}
         quantity={itemQuantity}
         model={itemModel}

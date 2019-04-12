@@ -12,35 +12,37 @@ function Transition(props) {
   return <Slide direction="right" {...props} />;
 }
 
-function MutateInventoryDialog({
+function MutateApplicantDialog({
   open,
   onClose,
   onMutate,
+  registrationNumber: registrationNumberProp,
   name: nameProp,
-  quantity: quantityProp,
-  model: modelProp,
+  semester: semesterProp,
   primaryAction,
   id: idProp,
   title,
 }) {
   const [id, setId] = useState(idProp);
+  const [registrationNumber, setRegistrationNumber] = useState(
+    registrationNumberProp
+  );
   const [name, setName] = useState(nameProp);
-  const [quantity, setQuantity] = useState(quantityProp);
-  const [model, setModel] = useState(modelProp);
+  const [semester, setSemester] = useState(semesterProp);
 
   useEffect(() => {
     setId(idProp);
+    setRegistrationNumber(registrationNumberProp);
     setName(nameProp);
-    setQuantity(quantityProp);
-    setModel(modelProp);
-  }, [idProp, nameProp, quantityProp, modelProp]);
+    setSemester(semesterProp);
+  }, [idProp, registrationNumberProp, nameProp, semesterProp]);
 
   function handleMutate() {
     onMutate({
-      name,
-      quantity: Number.parseInt(quantity, 10),
-      model,
       id,
+      registrationNumber,
+      name,
+      semester: Number.parseInt(semester, 10),
     });
   }
 
@@ -60,8 +62,18 @@ function MutateInventoryDialog({
         }}
       >
         <TextField
-          label="Nombre"
+          label="Matrícula"
           type="text"
+          fullWidth
+          variant="outlined"
+          style={{
+            marginBottom: '1rem',
+          }}
+          value={registrationNumber}
+          onChange={e => setRegistrationNumber(e.target.value)}
+        />
+        <TextField
+          label="Nombre completo"
           fullWidth
           variant="outlined"
           style={{
@@ -71,26 +83,16 @@ function MutateInventoryDialog({
           onChange={e => setName(e.target.value)}
         />
         <TextField
-          label="Cantidad"
+          label="Semestre"
           type="number"
           fullWidth
           variant="outlined"
           inputProps={{
-            min: 0,
-            max: 10,
+            min: 1,
+            max: 12,
           }}
-          value={quantity}
-          onChange={e => setQuantity(e.target.value)}
-          style={{
-            marginBottom: '1rem',
-          }}
-        />
-        <TextField
-          label="Modelo"
-          fullWidth
-          variant="outlined"
-          value={model}
-          onChange={e => setModel(e.target.value)}
+          value={semester}
+          onChange={e => setSemester(e.target.value)}
         />
       </DialogContent>
       <DialogActions>
@@ -105,23 +107,23 @@ function MutateInventoryDialog({
   );
 }
 
-MutateInventoryDialog.propTypes = {
+MutateApplicantDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onMutate: PropTypes.func.isRequired,
   id: PropTypes.string,
+  registrationNumber: PropTypes.string,
   name: PropTypes.string,
-  quantity: PropTypes.number,
-  model: PropTypes.string,
+  semester: PropTypes.number,
   primaryAction: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
 
-MutateInventoryDialog.defaultProps = {
+MutateApplicantDialog.defaultProps = {
   id: '',
+  registrationNumber: '',
   name: '',
-  quantity: 1,
-  model: '',
+  semester: 1,
 };
 
-export default MutateInventoryDialog;
+export default MutateApplicantDialog;

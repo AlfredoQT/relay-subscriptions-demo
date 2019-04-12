@@ -58,12 +58,14 @@ async function post(req, res) {
     .insertOne({
       name,
       registrationNumber: registrationNumber.toUpperCase(),
-      semester
+      semester: Number.parseInt(semester, 10)
     })).ops[0];
+
+  const { _id, ...applicantNoId } = applicant;
 
   res.status(201).send({
     status: 'CREATED',
-    applicant
+    applicant: { ...applicantNoId, id: _id }
   });
 }
 
@@ -97,9 +99,11 @@ async function put(req, res) {
       }
     )).value;
 
-  res.status(200).send({
+  const { _id, ...applicantNoId } = applicant;
+
+  res.status(201).send({
     status: 'UPDATED',
-    applicant
+    applicant: { ...applicantNoId, id: _id }
   });
 }
 
