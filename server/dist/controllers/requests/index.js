@@ -37,18 +37,20 @@ function _post() {
             requestsCount = _context.sent;
             _context.next = 6;
             return DatabaseConnector.getInstance().getDatabase().collection('requests').insertOne({
-              applicantNumber: applicant.registrationNumber,
-              applicant: ObjectID.createFromHexString(applicant.id),
+              applicant: {
+                id: ObjectID.createFromHexString(applicant.id),
+                applicantNumber: applicant.registrationNumber
+              },
               items: items.map(function (el) {
                 return {
-                  item: ObjectID.createFromHexString(el.id),
+                  id: ObjectID.createFromHexString(el.id),
                   quantityRequested: el.quantityRequested
                 };
               }),
               folio: requestsCount + 1,
               dateRequested: new Date(Date.now()),
-              delivered: false,
-              dateDelivered: new Date(Date.now())
+              dateDelivered: new Date(Date.now()),
+              status: 'toDeliver'
             });
 
           case 6:
@@ -118,7 +120,7 @@ function _put() {
         switch (_context3.prev = _context3.next) {
           case 0:
             id = req.params.id;
-            update = buildObjectFromQuery(req.body, ['delivered', 'dateDelivered']);
+            update = buildObjectFromQuery(req.body, ['status', 'dateDelivered']);
             _context3.next = 4;
             return DatabaseConnector.getInstance().getDatabase().collection('requests').findOneAndUpdate({
               _id: ObjectID.createFromHexString(id)
@@ -212,7 +214,9 @@ function _getItems() {
             _context5.next = 6;
             return DatabaseConnector.getInstance().getDatabase().collection('items').find({
               _id: {
-                $in: request.items
+                $in: request.items.map(function (el) {
+                  return el.id;
+                })
               }
             }).toArray();
 

@@ -10,6 +10,7 @@ import Tab from '@material-ui/core/Tab';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import AddRequestDialog from '../AddRequestDialog';
+import { updateItem, putRequest } from '../../api';
 
 const drawerWidth = 240;
 
@@ -39,8 +40,26 @@ function RequestsScreen({ classes }) {
     setOpen(false);
   }
 
-  function handleAdd() {
+  async function handleAdd(data) {
     setOpen(false);
+    const itemUpdates = data.items.map(el =>
+      updateItem(
+        {
+          quantity: el.quantity - el.quantityRequested,
+        },
+        el.id
+      )
+    );
+    await Promise.all(itemUpdates);
+
+    const response = await putRequest({
+      applicant: data.applicant,
+      items: data.items.map(el => ({
+        id: el.id,
+        quantityRequested: el.quantityRequested,
+      })),
+    });
+    console.log(response);
   }
 
   return (

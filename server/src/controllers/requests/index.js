@@ -14,16 +14,18 @@ async function post(req, res) {
     .getDatabase()
     .collection('requests')
     .insertOne({
-      applicantNumber: applicant.registrationNumber,
-      applicant: ObjectID.createFromHexString(applicant.id),
+      applicant: {
+        id: ObjectID.createFromHexString(applicant.id),
+        applicantNumber: applicant.registrationNumber
+      },
       items: items.map(el => ({
-        item: ObjectID.createFromHexString(el.id),
+        id: ObjectID.createFromHexString(el.id),
         quantityRequested: el.quantityRequested
       })),
       folio: requestsCount + 1,
       dateRequested: new Date(Date.now()),
-      delivered: false,
-      dateDelivered: new Date(Date.now())
+      dateDelivered: new Date(Date.now()),
+      status: 'toDeliver'
     })).ops[0];
 
   res.status(201).send({
@@ -50,7 +52,7 @@ async function getSingle(req, res) {
 
 async function put(req, res) {
   const { id } = req.params;
-  const update = buildObjectFromQuery(req.body, ['delivered', 'dateDelivered']);
+  const update = buildObjectFromQuery(req.body, ['status', 'dateDelivered']);
 
   const request = (await DatabaseConnector.getInstance()
     .getDatabase()
@@ -108,7 +110,7 @@ async function getItems(req, res) {
     .getDatabase()
     .collection('items')
     .find({
-      _id: { $in: request.items }
+      _id: { $in: request.items.map(el => el.id) }
     })
     .toArray();
 
