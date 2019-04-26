@@ -3,8 +3,7 @@ const DatabaseConnector = require('../../utils/DatabaseConnector');
 const buildObjectFromQuery = require('../../utils/buildObjectFromQuery');
 
 async function post(req, res) {
-  const { items, applicant } = req.body;
-
+  const { items, applicant, desiredDeliveryDate, pickupDate } = req.body;
   const requestsCount = await DatabaseConnector.getInstance()
     .getDatabase()
     .collection('requests')
@@ -23,8 +22,10 @@ async function post(req, res) {
         quantityRequested: el.quantityRequested
       })),
       folio: requestsCount + 1,
-      dateRequested: new Date(Date.now()),
-      dateDelivered: new Date(Date.now()),
+      requestedDate: new Date(Date.now()),
+      deliveredDate: null,
+      pickupDate: new Date(pickupDate),
+      desiredDeliveryDate: new Date(desiredDeliveryDate),
       status: 'toDeliver'
     })).ops[0];
 
@@ -52,7 +53,7 @@ async function getSingle(req, res) {
 
 async function put(req, res) {
   const { id } = req.params;
-  const update = buildObjectFromQuery(req.body, ['status', 'dateDelivered']);
+  const update = buildObjectFromQuery(req.body, ['status', 'deliveredDate']);
 
   const request = (await DatabaseConnector.getInstance()
     .getDatabase()

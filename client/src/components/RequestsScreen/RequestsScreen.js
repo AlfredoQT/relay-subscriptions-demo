@@ -58,6 +58,8 @@ function RequestsScreen({ classes }) {
         id: el.id,
         quantityRequested: el.quantityRequested,
       })),
+      pickupDate: data.pickupDate,
+      desiredDeliveryDate: data.desiredDeliveryDate,
     });
     console.log(response);
   }

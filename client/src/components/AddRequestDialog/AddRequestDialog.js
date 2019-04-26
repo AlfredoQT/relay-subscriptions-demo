@@ -16,6 +16,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
+import { DatePicker } from 'material-ui-pickers';
 import WarningIcon from '@material-ui/icons/Warning';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
@@ -127,6 +128,12 @@ const styles = {
     marginTop: 64,
     padding: 16,
   },
+  itemHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '4px 0',
+  },
 };
 
 function AddRequestDialog({ classes, open, onClose, onAdd }) {
@@ -137,6 +144,10 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
   const [itemOptions, setItemOptions] = useState([]);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [pickupDate, setPickupDate] = useState(new Date(Date.now()));
+  const [desiredDeliveryDate, setDesiredDeliveryDate] = useState(
+    new Date(Date.now())
+  );
 
   const fetchApplicantSubject$ = useRef(new Subject());
   const applicantResults$ = useRef(
@@ -175,6 +186,10 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
     setSelectedItems([null]);
     setSelectedQuantities([1]);
     setItemOptions([]);
+    setSnackbarMessage('');
+    setOpenSnackbar(false);
+    setPickupDate(new Date(Date.now()));
+    setDesiredDeliveryDate(new Date(Date.now()));
     return () => {
       applicantResults$.current.unsubscribe();
       itemResults$.current.unsubscribe();
@@ -254,6 +269,12 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
       return;
     }
 
+    if (pickupDate > desiredDeliveryDate) {
+      setSnackbarMessage('Fechas inválidas');
+      setOpenSnackbar(true);
+      return;
+    }
+
     const result = {
       applicant: {
         id: selectedApplicant.value,
@@ -264,6 +285,8 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
         quantityRequested: Number.parseInt(selectedQuantities[index], 10),
         quantity: el.quantity,
       })),
+      pickupDate,
+      desiredDeliveryDate,
     };
 
     onAdd(result);
@@ -308,6 +331,19 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
     ]);
   }
 
+  function handleRemoveItem(index) {
+    return function() {
+      setSelectedItems([
+        ...selectedItems.slice(0, index),
+        ...selectedItems.slice(index + 1),
+      ]);
+      setSelectedQuantities([
+        ...selectedQuantities.slice(0, index),
+        ...selectedQuantities.slice(index + 1),
+      ]);
+    };
+  }
+
   return (
     <>
       <Dialog
@@ -343,6 +379,28 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
               isClearable
             />
           </div>
+          <div className={classes.formGroup}>
+            <DatePicker
+              label="Fecha de recolección"
+              value={pickupDate}
+              onChange={setPickupDate}
+              animateYearScrolling
+              variant="outlined"
+              fullWidth
+              minDate={new Date(Date.now())}
+            />
+          </div>
+          <div className={classes.formGroup}>
+            <DatePicker
+              label="Fecha de entrega"
+              value={desiredDeliveryDate}
+              onChange={setDesiredDeliveryDate}
+              animateYearScrolling
+              variant="outlined"
+              fullWidth
+              minDate={new Date(Date.now())}
+            />
+          </div>
           <Button
             variant="contained"
             color="primary"
@@ -357,7 +415,19 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
           {selectedItems.map((el, index) => (
             <div key={itemKeys[index]}>
               <div>
-                <Typography variant="overline">Item {index + 1}</Typography>
+                <div className={classes.itemHeader}>
+                  <Typography variant="overline">Item {index + 1}</Typography>
+                  {index > 0 && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleRemoveItem(index)}
+                      size="small"
+                    >
+                      Quitar
+                    </Button>
+                  )}
+                </div>
                 <Select
                   options={itemOptions}
                   noOptionsMessage={() => 'No hay resultados...'}

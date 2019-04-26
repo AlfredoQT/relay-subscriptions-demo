@@ -23,13 +23,13 @@ function _post() {
   _post = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee(req, res) {
-    var _req$body, items, applicant, requestsCount, request;
+    var _req$body, items, applicant, desiredDeliveryDate, pickupDate, requestsCount, request;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _req$body = req.body, items = _req$body.items, applicant = _req$body.applicant;
+            _req$body = req.body, items = _req$body.items, applicant = _req$body.applicant, desiredDeliveryDate = _req$body.desiredDeliveryDate, pickupDate = _req$body.pickupDate;
             _context.next = 3;
             return DatabaseConnector.getInstance().getDatabase().collection('requests').count();
 
@@ -48,8 +48,10 @@ function _post() {
                 };
               }),
               folio: requestsCount + 1,
-              dateRequested: new Date(Date.now()),
-              dateDelivered: new Date(Date.now()),
+              requestedDate: new Date(Date.now()),
+              deliveredDate: null,
+              pickupDate: new Date(pickupDate),
+              desiredDeliveryDate: new Date(desiredDeliveryDate),
               status: 'toDeliver'
             });
 
@@ -120,7 +122,7 @@ function _put() {
         switch (_context3.prev = _context3.next) {
           case 0:
             id = req.params.id;
-            update = buildObjectFromQuery(req.body, ['status', 'dateDelivered']);
+            update = buildObjectFromQuery(req.body, ['status', 'deliveredDate']);
             _context3.next = 4;
             return DatabaseConnector.getInstance().getDatabase().collection('requests').findOneAndUpdate({
               _id: ObjectID.createFromHexString(id)
