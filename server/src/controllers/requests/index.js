@@ -19,7 +19,8 @@ async function post(req, res) {
       },
       items: items.map(el => ({
         id: ObjectID.createFromHexString(el.id),
-        quantityRequested: el.quantityRequested
+        quantityRequested: el.quantityRequested,
+        quantityDelivered: el.quantityDelivered
       })),
       folio: requestsCount + 1,
       requestedDate: new Date(Date.now()),
@@ -31,13 +32,18 @@ async function post(req, res) {
 
   res.status(201).send({
     status: 'CREATED',
-    request
+    request: { ...request, id: request._id }
   });
 }
 
 async function getSingle(req, res) {
   const { id } = req.params;
-
+  if (id.length !== 24) {
+    return res.status(200).send({
+      status: 'OK',
+      request: null
+    });
+  }
   const request = await DatabaseConnector.getInstance()
     .getDatabase()
     .collection('requests')
@@ -47,13 +53,17 @@ async function getSingle(req, res) {
 
   res.status(200).send({
     status: 'OK',
-    request
+    request: { ...request, id: request._id }
   });
 }
 
 async function put(req, res) {
   const { id } = req.params;
   const update = buildObjectFromQuery(req.body, ['status', 'deliveredDate']);
+
+  if (update.deliveredDate) {
+    update.deliveredDate = new Date(update.deliveredDate);
+  }
 
   const request = (await DatabaseConnector.getInstance()
     .getDatabase()
@@ -70,7 +80,7 @@ async function put(req, res) {
 
   res.status(200).send({
     status: 'UPDATED',
-    request
+    request: { ...request, id: request._id }
   });
 }
 
@@ -117,7 +127,12 @@ async function getItems(req, res) {
 
   res.status(200).send({
     status: 'OK',
-    items
+    items: items.map((el, index) => ({
+      ...el,
+      id: el._id,
+      quantityRequested: request.items[index].quantityRequested,
+      quantityDelivered: request.items[index].quantityDelivered
+    }))
   });
 }
 
@@ -127,11 +142,40 @@ async function get(req, res) {
     .getDatabase()
     .collection('requests')
     .find({})
+    .sort({ folio: -1 })
     .toArray()).map(el => ({ ...el, id: el._id }));
 
   return res.status(200).send({
     status: 'OK',
     requests
+  });
+}
+
+// HACK: Super nasty hack
+async function putItem(req, res) {
+  const { id, itemID } = req.params;
+  const update = buildObjectFromQuery(req.body, [
+    'quantityDelivered',
+    'quantityToIncrease'
+  ]);
+  await DatabaseConnector.getInstance()
+    .getDatabase()
+    .collection('requests')
+    .updateOne(
+      {
+        _id: ObjectID.createFromHexString(id),
+        'items.id': ObjectID.createFromHexString(itemID)
+      },
+      { $inc: { 'items.$.quantityDelivered': update.quantityToIncrease } }
+    );
+
+  return res.status(200).send({
+    status: 'OK',
+    item: {
+      ...req.body,
+      quantityDelivered: update.quantityDelivered,
+      quantity: req.body.quantity + update.quantityToIncrease
+    }
   });
 }
 
@@ -141,5 +185,6 @@ module.exports = {
   put,
   getApplicant,
   getItems,
-  get
+  get,
+  putItem
 };

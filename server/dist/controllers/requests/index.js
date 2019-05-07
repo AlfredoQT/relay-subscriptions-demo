@@ -44,7 +44,8 @@ function _post() {
               items: items.map(function (el) {
                 return {
                   id: ObjectID.createFromHexString(el.id),
-                  quantityRequested: el.quantityRequested
+                  quantityRequested: el.quantityRequested,
+                  quantityDelivered: el.quantityDelivered
                 };
               }),
               folio: requestsCount + 1,
@@ -59,7 +60,9 @@ function _post() {
             request = _context.sent.ops[0];
             res.status(201).send({
               status: 'CREATED',
-              request: request
+              request: _objectSpread({}, request, {
+                id: request._id
+              })
             });
 
           case 8:
@@ -86,19 +89,33 @@ function _getSingle() {
         switch (_context2.prev = _context2.next) {
           case 0:
             id = req.params.id;
-            _context2.next = 3;
+
+            if (!(id.length !== 24)) {
+              _context2.next = 3;
+              break;
+            }
+
+            return _context2.abrupt("return", res.status(200).send({
+              status: 'OK',
+              request: null
+            }));
+
+          case 3:
+            _context2.next = 5;
             return DatabaseConnector.getInstance().getDatabase().collection('requests').findOne({
               _id: ObjectID.createFromHexString(id)
             });
 
-          case 3:
+          case 5:
             request = _context2.sent;
             res.status(200).send({
               status: 'OK',
-              request: request
+              request: _objectSpread({}, request, {
+                id: request._id
+              })
             });
 
-          case 5:
+          case 7:
           case "end":
             return _context2.stop();
         }
@@ -123,7 +140,12 @@ function _put() {
           case 0:
             id = req.params.id;
             update = buildObjectFromQuery(req.body, ['status', 'deliveredDate']);
-            _context3.next = 4;
+
+            if (update.deliveredDate) {
+              update.deliveredDate = new Date(update.deliveredDate);
+            }
+
+            _context3.next = 5;
             return DatabaseConnector.getInstance().getDatabase().collection('requests').findOneAndUpdate({
               _id: ObjectID.createFromHexString(id)
             }, {
@@ -132,14 +154,16 @@ function _put() {
               returnOriginal: false
             });
 
-          case 4:
+          case 5:
             request = _context3.sent.value;
             res.status(200).send({
               status: 'UPDATED',
-              request: request
+              request: _objectSpread({}, request, {
+                id: request._id
+              })
             });
 
-          case 6:
+          case 7:
           case "end":
             return _context3.stop();
         }
@@ -226,7 +250,13 @@ function _getItems() {
             items = _context5.sent;
             res.status(200).send({
               status: 'OK',
-              items: items
+              items: items.map(function (el, index) {
+                return _objectSpread({}, el, {
+                  id: el._id,
+                  quantityRequested: request.items[index].quantityRequested,
+                  quantityDelivered: request.items[index].quantityDelivered
+                });
+              })
             });
 
           case 8:
@@ -241,7 +271,8 @@ function _getItems() {
 
 function get(_x11, _x12) {
   return _get.apply(this, arguments);
-}
+} // HACK: Super nasty hack
+
 
 function _get() {
   _get = _asyncToGenerator(
@@ -253,7 +284,9 @@ function _get() {
         switch (_context6.prev = _context6.next) {
           case 0:
             _context6.next = 2;
-            return DatabaseConnector.getInstance().getDatabase().collection('requests').find({}).toArray();
+            return DatabaseConnector.getInstance().getDatabase().collection('requests').find({}).sort({
+              folio: -1
+            }).toArray();
 
           case 2:
             _context6.t0 = function (el) {
@@ -278,11 +311,57 @@ function _get() {
   return _get.apply(this, arguments);
 }
 
+function putItem(_x13, _x14) {
+  return _putItem.apply(this, arguments);
+}
+
+function _putItem() {
+  _putItem = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee7(req, res) {
+    var _req$params, id, itemID, update;
+
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+      while (1) {
+        switch (_context7.prev = _context7.next) {
+          case 0:
+            _req$params = req.params, id = _req$params.id, itemID = _req$params.itemID;
+            update = buildObjectFromQuery(req.body, ['quantityDelivered', 'quantityToIncrease']);
+            _context7.next = 4;
+            return DatabaseConnector.getInstance().getDatabase().collection('requests').updateOne({
+              _id: ObjectID.createFromHexString(id),
+              'items.id': ObjectID.createFromHexString(itemID)
+            }, {
+              $inc: {
+                'items.$.quantityDelivered': update.quantityToIncrease
+              }
+            });
+
+          case 4:
+            return _context7.abrupt("return", res.status(200).send({
+              status: 'OK',
+              item: _objectSpread({}, req.body, {
+                quantityDelivered: update.quantityDelivered,
+                quantity: req.body.quantity + update.quantityToIncrease
+              })
+            }));
+
+          case 5:
+          case "end":
+            return _context7.stop();
+        }
+      }
+    }, _callee7);
+  }));
+  return _putItem.apply(this, arguments);
+}
+
 module.exports = {
   post: post,
   getSingle: getSingle,
   put: put,
   getApplicant: getApplicant,
   getItems: getItems,
-  get: get
+  get: get,
+  putItem: putItem
 };

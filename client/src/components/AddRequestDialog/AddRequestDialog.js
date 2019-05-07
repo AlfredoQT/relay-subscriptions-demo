@@ -16,7 +16,7 @@ import SnackbarContent from '@material-ui/core/SnackbarContent';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
-import { DatePicker } from 'material-ui-pickers';
+import { DateTimePicker } from 'material-ui-pickers';
 import WarningIcon from '@material-ui/icons/Warning';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
@@ -380,7 +380,7 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
             />
           </div>
           <div className={classes.formGroup}>
-            <DatePicker
+            <DateTimePicker
               label="Fecha de recolección"
               value={pickupDate}
               onChange={setPickupDate}
@@ -391,7 +391,7 @@ function AddRequestDialog({ classes, open, onClose, onAdd }) {
             />
           </div>
           <div className={classes.formGroup}>
-            <DatePicker
+            <DateTimePicker
               label="Fecha de entrega"
               value={desiredDeliveryDate}
               onChange={setDesiredDeliveryDate}

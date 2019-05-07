@@ -18,32 +18,32 @@ const drawerItems = [
   {
     name: 'Inventario',
     path: '/',
-    icon: <ViewListIcon />
+    icon: <ViewListIcon />,
   },
   {
-    name: 'Aplicantes',
+    name: 'Alumnos',
     path: '/aplicantes',
-    icon: <AccountCircleIcon />
+    icon: <AccountCircleIcon />,
   },
   {
     name: 'Pedidos',
     path: '/pedidos',
-    icon: <BallotIcon />
-  }
+    icon: <BallotIcon />,
+  },
 ];
 
 const styles = theme => ({
   root: {
-    display: 'flex'
+    display: 'flex',
   },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0
+    flexShrink: 0,
   },
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
   },
-  toolbar: theme.mixins.toolbar
+  toolbar: theme.mixins.toolbar,
 });
 
 function MainDrawer({ classes, history, location }) {
@@ -58,7 +58,7 @@ function MainDrawer({ classes, history, location }) {
       className={classes.drawer}
       variant="permanent"
       classes={{
-        paper: classes.drawerPaper
+        paper: classes.drawerPaper,
       }}
       anchor="left"
     >
@@ -84,7 +84,7 @@ MainDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 };
 
 export default withRouter(withStyles(styles)(MainDrawer));

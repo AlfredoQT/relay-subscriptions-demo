@@ -30,6 +30,11 @@ export async function getApplicants(query = null, options = {}) {
   return applicants;
 }
 
+export async function getRequests(options = {}) {
+  const requests = await get(`http://localhost:4001/requests`, options);
+  return requests;
+}
+
 export function putItem(item, options = {}) {
   return fetch('http://localhost:4001/items', {
     method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -89,6 +94,60 @@ export function putRequest(request, options = {}) {
     redirect: 'follow', // manual, *follow, error
     referrer: 'no-referrer', // no-referrer, *client
     body: JSON.stringify(request),
+    ...options,
+  }).then(async response => {
+    const json = await response.json();
+    if (!response.ok) {
+      throw json; // TODO: Fix this super crap
+    }
+    return json;
+  });
+}
+
+export function getRequest(id, options = {}) {
+  return get(`http://localhost:4001/requests/${id}`, options);
+}
+
+export function updateRequest(id, request, options = {}) {
+  return fetch(`http://localhost:4001/requests/${id}`, {
+    method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, cors, *same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      // "Content-Type": "application/x-www-form-urlencoded",
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // no-referrer, *client
+    body: JSON.stringify(request),
+    ...options,
+  }).then(async response => {
+    const json = await response.json();
+    if (!response.ok) {
+      throw json; // TODO: Fix this super crap
+    }
+    return json;
+  });
+}
+
+export function getRequestItems(id, options = {}) {
+  return get(`http://localhost:4001/requests/${id}/items`, options);
+}
+
+export function updateRequestItem(id, itemId, item, options = {}) {
+  return fetch(`http://localhost:4001/requests/${id}/items/${itemId}`, {
+    method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, cors, *same-origin
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json',
+      // "Content-Type": "application/x-www-form-urlencoded",
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // no-referrer, *client
+    body: JSON.stringify(item),
     ...options,
   }).then(async response => {
     const json = await response.json();

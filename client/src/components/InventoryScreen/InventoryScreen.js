@@ -156,7 +156,7 @@ function InventoryScreen({ classes }) {
                   onModifyQuantity={quantity =>
                     handleModifyQuantity(itemMapped, quantity)
                   }
-                  key={itemMapped.name}
+                  key={itemMapped.id}
                 />
               ))}
             </ul>

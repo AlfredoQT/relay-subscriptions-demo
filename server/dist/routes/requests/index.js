@@ -11,6 +11,7 @@ router.get('/:id', requests.getSingle);
 router.put('/:id', requests.put);
 router.get('/:id/applicant', requests.getApplicant);
 router.get('/:id/items', requests.getItems);
+router.put('/:id/items/:itemID', requests.putItem);
 module.exports = {
   path: '/requests',
   router: router

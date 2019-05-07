@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
@@ -7,14 +7,17 @@ import MainAppBar from '../MainAppBar';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import AddRequestDialog from '../AddRequestDialog';
-import { updateItem, putRequest } from '../../api';
+import { updateItem, putRequest, getRequests } from '../../api';
+import Spinner from '../Spinner';
+import RequestListItem from '../RequestListItem';
 
 const drawerWidth = 240;
 
-const styles = {
+const styles = theme => ({
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
@@ -26,11 +29,42 @@ const styles = {
     bottom: 48,
     right: 48,
   },
-};
+  content: {
+    flexGrow: 1,
+    marginLeft: drawerWidth,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    position: 'relative',
+    marginTop: 64 + 48,
+  },
+  requestsList: {
+    listStyleType: 'none',
+    margin: 0,
+    padding: 0,
+    '&> li': {
+      marginBottom: 16,
+    },
+  },
+});
 
-function RequestsScreen({ classes }) {
+const filter = ['toDeliver', 'partialDelivery', 'delivered'];
+
+function RequestsScreen({ classes, history }) {
+  const [loading, setLoading] = useState(true);
+  const [requests, setRequests] = useState([]);
   const [currentTab, setCurrentTab] = useState(0);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    let abortController = new AbortController();
+    getRequests({ signal: abortController.signal }).then(requestsRes => {
+      setRequests(requestsRes.requests);
+      setLoading(false);
+    });
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, []);
 
   function handleOpen() {
     setOpen(true);
@@ -57,12 +91,24 @@ function RequestsScreen({ classes }) {
       items: data.items.map(el => ({
         id: el.id,
         quantityRequested: el.quantityRequested,
+        quantityDelivered: 0,
       })),
       pickupDate: data.pickupDate,
       desiredDeliveryDate: data.desiredDeliveryDate,
     });
-    console.log(response);
+
+    setRequests([response.request, ...requests]);
   }
+
+  function handleRequestClick(id) {
+    return function() {
+      history.push(`/pedidos/${id}`);
+    };
+  }
+
+  const filteredRequests = requests.filter(
+    el => el.status === filter[currentTab]
+  );
 
   return (
     <>
@@ -70,7 +116,7 @@ function RequestsScreen({ classes }) {
       <CssBaseline />
       <MainAppBar title="Pedidos" />
       <MainDrawer />
-      <AppBar position="static" color="default" className={classes.appBar}>
+      <AppBar position="fixed" color="default" className={classes.appBar}>
         <Tabs
           value={currentTab}
           onChange={(e, v) => setCurrentTab(v)}
@@ -83,6 +129,28 @@ function RequestsScreen({ classes }) {
           <Tab label="Entregados" />
         </Tabs>
       </AppBar>
+      <main className={classes.content}>
+        {loading && <Spinner />}
+        {!loading && !requests.length && (
+          <Typography variant="h6">No hay pedidos.</Typography>
+        )}
+        {!loading && requests.length > 0 && !filteredRequests.length && (
+          <Typography variant="h6">
+            No hay pedidos en esta categoría.
+          </Typography>
+        )}
+        {!loading && requests.length > 0 && filteredRequests.length > 0 && (
+          <ul className={classes.requestsList}>
+            {filteredRequests.map(requestMapped => (
+              <RequestListItem
+                key={requestMapped.id}
+                request={requestMapped}
+                onClick={handleRequestClick(requestMapped.id)}
+              />
+            ))}
+          </ul>
+        )}
+      </main>
       <Fab
         color="secondary"
         aria-label="Add"
@@ -97,6 +165,7 @@ function RequestsScreen({ classes }) {
 
 RequestsScreen.propTypes = {
   classes: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(RequestsScreen);
